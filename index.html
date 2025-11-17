@@ -405,32 +405,31 @@
       color: #111827;
     }
 
+    /* Botões de fluxo – agora com estilo uniforme (uma cor só) */
     .btn-flow {
       flex: 1;
-      padding: 4px;
-      font-size: 0.7rem;
+      padding: 6px;
+      font-size: 0.8rem;
+      border: none;
+      border-radius: 999px;
+      font-weight: 600;
+      cursor: pointer;
     }
 
     body.theme-dark .btn-flow {
-      background: #1f2937;
-      color: #e5e7eb;
+      background: var(--vbet-magenta);
+      color: #fdf2f8;
     }
 
     body.theme-light .btn-flow {
-      background: #e5e7eb;
-      color: #111827;
+      background: var(--vbet-magenta);
+      color: #ffffff;
     }
 
-    .btn-flow-action {
-      border: 1px solid var(--vbet-magenta-light);
-    }
-
-    .btn-flow-ok {
-      border: 1px solid #4ade80;
-    }
-
+    .btn-flow-action,
+    .btn-flow-ok,
     .btn-flow-noresp {
-      border: 1px solid #f97316;
+      border: none !important;
     }
 
     /* Estados do card */
