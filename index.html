@@ -2,18 +2,18 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Timer SLA – 4 Chats (VBET)</title>
+  <title>Timer SLA – 4 Chats</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     :root {
-      --vbet-magenta: #e0007a;
-      --vbet-magenta-light: #ff5fb3;
-      --vbet-dark-bg: #050816;
-      --vbet-card-dark: #0b1120;
-      --vbet-card-border-dark: #1f2937;
-      --vbet-light-bg: #f9fafb;
-      --vbet-card-light: #ffffff;
-      --vbet-card-border-light: #e5e7eb;
+      --brand-magenta: #e0007a;
+      --brand-magenta-light: #ff5fb3;
+      --brand-dark-bg: #050816;
+      --brand-card-dark: #0b1120;
+      --brand-card-border-dark: #1f2937;
+      --brand-light-bg: #f9fafb;
+      --brand-card-light: #ffffff;
+      --brand-card-border-light: #e5e7eb;
     }
 
     * {
@@ -27,12 +27,12 @@
     }
 
     body.theme-dark {
-      background: var(--vbet-dark-bg);
+      background: var(--brand-dark-bg);
       color: #e5e7eb;
     }
 
     body.theme-light {
-      background: var(--vbet-light-bg);
+      background: var(--brand-light-bg);
       color: #111827;
     }
 
@@ -85,7 +85,8 @@
     .test-btn,
     .theme-btn,
     .help-btn,
-    .flow-help-btn {
+    .flow-help-btn,
+    .mute-all-btn {
       padding: 4px 10px;
       border-radius: 999px;
       border: none;
@@ -132,7 +133,17 @@
 
     body.theme-light .flow-help-btn {
       background: #3b82f6;
-      color: #f9fafb;
+      color: #f9f9ff;
+    }
+
+    body.theme-dark .mute-all-btn {
+      background: #f97316;
+      color: #111827;
+    }
+
+    body.theme-light .mute-all-btn {
+      background: #ea580c;
+      color: #ffffff;
     }
 
     .grid {
@@ -152,32 +163,89 @@
       padding: 10px;
       position: relative;
       transition: background 0.2s, box-shadow 0.2s, border-color 0.2s, transform 0.1s, opacity 0.1s;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    /* Barrinha colorida fixa por chat */
+    .card::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 8px;
+      bottom: 8px;
+      width: 4px;
+      border-radius: 999px;
+    }
+
+    .card[data-id="1"]::before {
+      background: #a855f7; /* roxo */
+    }
+
+    .card[data-id="2"]::before {
+      background: #3b82f6; /* azul */
+    }
+
+    .card[data-id="3"]::before {
+      background: #22c55e; /* verde */
+    }
+
+    .card[data-id="4"]::before {
+      background: #f97316; /* laranja */
     }
 
     body.theme-dark .card {
-      background: var(--vbet-card-dark);
-      border: 1px solid var(--vbet-card-border-dark);
+      background: var(--brand-card-dark);
+      border: 1px solid var(--brand-card-border-dark);
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
     }
 
     body.theme-light .card {
-      background: var(--vbet-card-light);
-      border: 1px solid var(--vbet-card-border-light);
+      background: var(--brand-card-light);
+      border: 1px solid var(--brand-card-border-light);
       box-shadow: 0 10px 25px rgba(15, 23, 42, 0.15);
+    }
+
+    /* Estado idle bem apagado / neutro */
+    body.theme-dark .card.idle {
+      background: #020617;
+      border-color: #1f2937;
+      opacity: 0.96;
+    }
+
+    body.theme-light .card.idle {
+      background: #f9fafb;
+      border-color: #e5e7eb;
+      opacity: 1;
     }
 
     .card-title {
       font-size: 0.9rem;
       font-weight: 700;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 6px;
+    }
+
+    .card-title-left {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card-title-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .drag-hint {
       font-size: 0.65rem;
       opacity: 0.6;
+      white-space: nowrap;
     }
 
     body.theme-dark .card-title {
@@ -188,12 +256,54 @@
       color: #111827;
     }
 
+    /* Bolinha de status */
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(0,0,0,0.15);
+    }
+
+    .card.idle .status-dot {
+      background: #9ca3af;
+    }
+
+    .card.ok .status-dot {
+      background: #22c55e;
+    }
+
+    .card.warn .status-dot {
+      background: #facc15;
+    }
+
+    .card.danger .status-dot,
+    .card.expired .status-dot {
+      background: #ef4444;
+    }
+
+    /* Badge de som */
+    .sound-badge {
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .sound-on {
+      background: #f97316;
+      color: #111827;
+    }
+
+    .sound-off {
+      background: #4b5563;
+      color: #f9fafb;
+    }
+
     .label-row,
     .time-input-row {
       display: flex;
       gap: 6px;
       align-items: center;
-      margin-bottom: 6px;
     }
 
     .label-row span,
@@ -203,7 +313,16 @@
       white-space: nowrap;
     }
 
-    .label-input,
+    /* Identificação mais destaque */
+    .label-input {
+      flex: 1;
+      padding: 5px 7px;
+      border-radius: 8px;
+      border: 1px solid #4b5563;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
     .time-input {
       flex: 1;
       padding: 4px 6px;
@@ -234,8 +353,8 @@
       display: flex;
       justify-content: flex-end;
       font-size: 0.72rem;
-      margin-top: -4px;
-      margin-bottom: 4px;
+      margin-top: -2px;
+      margin-bottom: 2px;
     }
 
     .time-toggle-row label {
@@ -271,7 +390,7 @@
       font-size: 2rem;
       font-weight: 800;
       text-align: center;
-      margin: 4px 0;
+      margin: 4px 0 2px 0;
     }
 
     .last-timer,
@@ -286,15 +405,15 @@
 
     .last-timer {
       font-weight: 600;
-      margin-top: 2px;
+      margin-top: 0;
     }
 
     body.theme-dark .last-timer {
-      color: var(--vbet-magenta-light);
+      color: var(--brand-magenta-light);
     }
 
     body.theme-light .last-timer {
-      color: var(--vbet-magenta);
+      color: var(--brand-magenta);
     }
 
     .history-msg {
@@ -306,11 +425,11 @@
     .history-current {
       font-weight: 700;
       text-decoration: underline;
-      color: var(--vbet-magenta-light);
+      color: var(--brand-magenta-light);
     }
 
     body.theme-light .history-current {
-      color: var(--vbet-magenta);
+      color: var(--brand-magenta);
     }
 
     .flow-msg {
@@ -321,8 +440,35 @@
     .btn-row {
       display: flex;
       gap: 6px;
-      margin-top: 6px;
+      margin-top: 4px;
       flex-wrap: wrap;
+    }
+
+    .btn-row-timers {
+      margin-top: 2px;
+    }
+
+    .btn-row-flows {
+      margin-top: 2px;
+    }
+
+    .btn-row-controls {
+      margin-top: 6px;
+    }
+
+    .btn-section-label {
+      font-size: 0.7rem;
+      opacity: 0.75;
+      margin-top: 4px;
+      margin-bottom: 2px;
+    }
+
+    body.theme-dark .btn-section-label {
+      color: #9ca3af;
+    }
+
+    body.theme-light .btn-section-label {
+      color: #4b5563;
     }
 
     button {
@@ -347,7 +493,7 @@
 
     body.theme-dark .btn-3,
     body.theme-dark .btn-5 {
-      background: var(--vbet-magenta);
+      background: var(--brand-magenta);
       color: #fdf2f8;
     }
 
@@ -359,14 +505,16 @@
 
     body.theme-light .btn-3,
     body.theme-light .btn-5 {
-      background: var(--vbet-magenta);
+      background: var(--brand-magenta);
       color: #fdf2f8;
     }
 
     .btn-cancel,
-    .btn-mute {
+    .btn-mute,
+    .btn-clear {
       padding: 6px;
-      flex: 0.9;
+      flex: 1;
+      min-width: 0;
     }
 
     body.theme-dark .btn-cancel {
@@ -389,6 +537,16 @@
       color: #ffffff;
     }
 
+    body.theme-dark .btn-clear {
+      background: #6b7280;
+      color: #f9fafb;
+    }
+
+    body.theme-light .btn-clear {
+      background: #d1d5db;
+      color: #111827;
+    }
+
     .btn-paste-time {
       flex: 0 0 auto;
       padding: 4px 8px;
@@ -405,24 +563,25 @@
       color: #111827;
     }
 
-    /* Botões de fluxo – agora com estilo uniforme (uma cor só) */
+    /* Botões de fluxo – uma cor só */
     .btn-flow {
-      flex: 1;
+      flex: 1 1 48%;
       padding: 6px;
       font-size: 0.8rem;
       border: none;
       border-radius: 999px;
       font-weight: 600;
       cursor: pointer;
+      text-align: center;
     }
 
     body.theme-dark .btn-flow {
-      background: var(--vbet-magenta);
+      background: var(--brand-magenta);
       color: #fdf2f8;
     }
 
     body.theme-light .btn-flow {
-      background: var(--vbet-magenta);
+      background: var(--brand-magenta);
       color: #ffffff;
     }
 
@@ -437,7 +596,7 @@
     .card.idle {}
 
     body.theme-dark .card.ok {
-      background: radial-gradient(circle at top left, rgba(224, 0, 122, 0.2), var(--vbet-card-dark));
+      background: radial-gradient(circle at top left, rgba(224, 0, 122, 0.2), var(--brand-card-dark));
     }
 
     body.theme-light .card.ok {
@@ -475,6 +634,11 @@
       box-shadow: 0 0 0 2px #f97373;
     }
 
+    /* Card tocando som */
+    .card.alarming {
+      box-shadow: 0 0 0 2px #f97316, 0 0 20px rgba(249, 115, 22, 0.7);
+    }
+
     .blink {
       animation: blink 0.6s steps(1) infinite;
     }
@@ -496,7 +660,7 @@
     }
 
     .card.drop-target {
-      box-shadow: 0 0 0 2px var(--vbet-magenta);
+      box-shadow: 0 0 0 2px var(--brand-magenta);
     }
 
     .signature {
@@ -631,16 +795,24 @@
       </label>
     </div>
     <button class="test-btn" id="test-alarm">Testar alarme</button>
+    <button class="mute-all-btn" id="mute-all-btn">Silenciar todos</button>
     <button class="theme-btn" id="theme-toggle">Modo claro</button>
     <button class="help-btn" id="help-btn">Ajuda geral</button>
     <button class="flow-help-btn" id="flow-help-btn">Ajuda fluxos</button>
   </div>
 
   <div class="grid">
+    <!-- CARD 1 -->
     <div class="card idle" data-id="1" draggable="true">
       <div class="card-title">
-        <span>Chat 1</span>
-        <span class="drag-hint">Arraste para mover</span>
+        <div class="card-title-left">
+          <span class="status-dot"></span>
+          <span>Chat 1</span>
+        </div>
+        <div class="card-title-right">
+          <span class="sound-badge"></span>
+          <span class="drag-hint">Arraste para mover</span>
+        </div>
       </div>
 
       <div class="label-row">
@@ -665,24 +837,40 @@
       <div class="status-msg"></div>
       <div class="flow-msg"></div>
 
-      <div class="btn-row">
+      <div class="btn-section-label">Timers manuais</div>
+      <div class="btn-row btn-row-timers">
         <button class="btn-time btn-1" data-minutes="1">+1</button>
         <button class="btn-time btn-2" data-minutes="2">+2</button>
         <button class="btn-time btn-3" data-minutes="3">+3</button>
         <button class="btn-time btn-5" data-minutes="5">+5</button>
+      </div>
+
+      <div class="btn-section-label">Fluxos de inatividade</div>
+      <div class="btn-row btn-row-flows">
         <button class="btn-flow btn-flow-action" data-flow="action">Ação 5-3-2-1</button>
         <button class="btn-flow btn-flow-action-short" data-flow="action_short">Ação 3-2-1</button>
         <button class="btn-flow btn-flow-ok" data-flow="after_ok">Fech. OK (1)</button>
         <button class="btn-flow btn-flow-noresp" data-flow="after_noresp">Fech. 2+1</button>
+      </div>
+
+      <div class="btn-row btn-row-controls">
+        <button class="btn-clear">Limpar campos</button>
         <button class="btn-cancel">Cancelar</button>
         <button class="btn-mute">Silenciar</button>
       </div>
     </div>
 
+    <!-- CARD 2 -->
     <div class="card idle" data-id="2" draggable="true">
       <div class="card-title">
-        <span>Chat 2</span>
-        <span class="drag-hint">Arraste para mover</span>
+        <div class="card-title-left">
+          <span class="status-dot"></span>
+          <span>Chat 2</span>
+        </div>
+        <div class="card-title-right">
+          <span class="sound-badge"></span>
+          <span class="drag-hint">Arraste para mover</span>
+        </div>
       </div>
 
       <div class="label-row">
@@ -707,24 +895,40 @@
       <div class="status-msg"></div>
       <div class="flow-msg"></div>
 
-      <div class="btn-row">
+      <div class="btn-section-label">Timers manuais</div>
+      <div class="btn-row btn-row-timers">
         <button class="btn-time btn-1" data-minutes="1">+1</button>
         <button class="btn-time btn-2" data-minutes="2">+2</button>
         <button class="btn-time btn-3" data-minutes="3">+3</button>
         <button class="btn-time btn-5" data-minutes="5">+5</button>
+      </div>
+
+      <div class="btn-section-label">Fluxos de inatividade</div>
+      <div class="btn-row btn-row-flows">
         <button class="btn-flow btn-flow-action" data-flow="action">Ação 5-3-2-1</button>
         <button class="btn-flow btn-flow-action-short" data-flow="action_short">Ação 3-2-1</button>
         <button class="btn-flow btn-flow-ok" data-flow="after_ok">Fech. OK (1)</button>
         <button class="btn-flow btn-flow-noresp" data-flow="after_noresp">Fech. 2+1</button>
+      </div>
+
+      <div class="btn-row btn-row-controls">
+        <button class="btn-clear">Limpar campos</button>
         <button class="btn-cancel">Cancelar</button>
         <button class="btn-mute">Silenciar</button>
       </div>
     </div>
 
+    <!-- CARD 3 -->
     <div class="card idle" data-id="3" draggable="true">
       <div class="card-title">
-        <span>Chat 3</span>
-        <span class="drag-hint">Arraste para mover</span>
+        <div class="card-title-left">
+          <span class="status-dot"></span>
+          <span>Chat 3</span>
+        </div>
+        <div class="card-title-right">
+          <span class="sound-badge"></span>
+          <span class="drag-hint">Arraste para mover</span>
+        </div>
       </div>
 
       <div class="label-row">
@@ -749,24 +953,40 @@
       <div class="status-msg"></div>
       <div class="flow-msg"></div>
 
-      <div class="btn-row">
+      <div class="btn-section-label">Timers manuais</div>
+      <div class="btn-row btn-row-timers">
         <button class="btn-time btn-1" data-minutes="1">+1</button>
         <button class="btn-time btn-2" data-minutes="2">+2</button>
         <button class="btn-time btn-3" data-minutes="3">+3</button>
         <button class="btn-time btn-5" data-minutes="5">+5</button>
+      </div>
+
+      <div class="btn-section-label">Fluxos de inatividade</div>
+      <div class="btn-row btn-row-flows">
         <button class="btn-flow btn-flow-action" data-flow="action">Ação 5-3-2-1</button>
         <button class="btn-flow btn-flow-action-short" data-flow="action_short">Ação 3-2-1</button>
         <button class="btn-flow btn-flow-ok" data-flow="after_ok">Fech. OK (1)</button>
         <button class="btn-flow btn-flow-noresp" data-flow="after_noresp">Fech. 2+1</button>
+      </div>
+
+      <div class="btn-row btn-row-controls">
+        <button class="btn-clear">Limpar campos</button>
         <button class="btn-cancel">Cancelar</button>
         <button class="btn-mute">Silenciar</button>
       </div>
     </div>
 
+    <!-- CARD 4 -->
     <div class="card idle" data-id="4" draggable="true">
       <div class="card-title">
-        <span>Chat 4</span>
-        <span class="drag-hint">Arraste para mover</span>
+        <div class="card-title-left">
+          <span class="status-dot"></span>
+          <span>Chat 4</span>
+        </div>
+        <div class="card-title-right">
+          <span class="sound-badge"></span>
+          <span class="drag-hint">Arraste para mover</span>
+        </div>
       </div>
 
       <div class="label-row">
@@ -791,15 +1011,24 @@
       <div class="status-msg"></div>
       <div class="flow-msg"></div>
 
-      <div class="btn-row">
+      <div class="btn-section-label">Timers manuais</div>
+      <div class="btn-row btn-row-timers">
         <button class="btn-time btn-1" data-minutes="1">+1</button>
         <button class="btn-time btn-2" data-minutes="2">+2</button>
         <button class="btn-time btn-3" data-minutes="3">+3</button>
         <button class="btn-time btn-5" data-minutes="5">+5</button>
+      </div>
+
+      <div class="btn-section-label">Fluxos de inatividade</div>
+      <div class="btn-row btn-row-flows">
         <button class="btn-flow btn-flow-action" data-flow="action">Ação 5-3-2-1</button>
         <button class="btn-flow btn-flow-action-short" data-flow="action_short">Ação 3-2-1</button>
         <button class="btn-flow btn-flow-ok" data-flow="after_ok">Fech. OK (1)</button>
         <button class="btn-flow btn-flow-noresp" data-flow="after_noresp">Fech. 2+1</button>
+      </div>
+
+      <div class="btn-row btn-row-controls">
+        <button class="btn-clear">Limpar campos</button>
         <button class="btn-cancel">Cancelar</button>
         <button class="btn-mute">Silenciar</button>
       </div>
@@ -807,6 +1036,7 @@
   </div>
 
   <div class="signature">By: Bartolomeu & GPT</div>
+
   <div id="help-modal" class="help-modal">
     <div class="help-content">
       <div class="help-title">Ajuda geral</div>
@@ -817,7 +1047,7 @@
         <li>Botões <b>+1, +2, +3, +5</b> iniciam um hold manual.</li>
         <li>Se “Usar horário do campo” estiver ligado, o hold conta a partir do horário digitado; caso contrário, conta a partir de agora.</li>
         <li>Os botões de fluxo (como <b>Ação 5-3-2-1</b>, <b>Ação 3-2-1</b>, etc.) seguem fluxos de inatividade específicos (veja em “Ajuda fluxos”).</li>
-        <li>Quando o tempo zera, o card fica vermelho e o alarme toca até clicar em <b>Silenciar</b>.</li>
+        <li>Quando o tempo zera, o card fica vermelho e o alarme toca até clicar em <b>Silenciar</b> ou <b>Silenciar todos</b>.</li>
         <li><b>Cancelar</b> limpa o timer daquele chat, mas mantém o histórico de holds.</li>
         <li><b>Arraste</b> um card para trocar a posição dele com outro.</li>
       </ul>
@@ -832,12 +1062,12 @@
         <li><b>Ação 5-3-2-1</b>: Cliente executando um passo a passo mais longo.</li>
         <li>Fluxo: 5 min → 3 min → 2 min → 1 min.</li>
         <li><b>Ação 3-2-1</b>: Cliente executando um passo a passo mais curto.</li>
-        <li>Fluxo: **3 min → 2 min → 1 min**.</li>
-        <li>**Regra para "Ação" (5-3-2-1 e 3-2-1):** O primeiro hold pode usar o horário do campo (se “Usar horário do campo” estiver ligado). Os próximos holds sempre começam quando você clica em "Já respondi, iniciar X min".</li>
+        <li>Fluxo: 3 min → 2 min → 1 min.</li>
+        <li><b>Regra para "Ação" (5-3-2-1 e 3-2-1):</b> O primeiro hold pode usar o horário do campo (se “Usar horário do campo” estiver ligado). Os próximos holds sempre começam quando você clica em "Já respondi, iniciar X min".</li>
         <li><b>Fech. OK (1)</b>: Após o cliente confirmar que ficou tudo certo (“ok”, “tudo certo”).</li>
-        <li>Você pergunta se pode ajudar em algo mais, inicia o fluxo, e o timer segura **1 minuto** (usando o horário do campo se o modo estiver ligado, senão a partir de agora).</li>
+        <li>Você pergunta se pode ajudar em algo mais, inicia o fluxo, e o timer segura 1 minuto (usando o horário do campo se o modo estiver ligado, senão a partir de agora).</li>
         <li><b>Fech. 2+1</b>: Após enviar a resolutiva quando o cliente não responde.</li>
-        <li>Primeiro hold de **2 minutos** (podendo usar o horário do campo); ao acabar, você envia “Posso ajudar em algo mais?” e o timer faz o segundo hold de **1 minuto** a partir do clique.</li>
+        <li>Primeiro hold de 2 minutos (podendo usar o horário do campo); ao acabar, você envia “Posso ajudar em algo mais?” e o timer faz o segundo hold de 1 minuto a partir do clique.</li>
       </ul>
       <button id="flow-help-close" class="help-close">Fechar</button>
     </div>
@@ -861,6 +1091,7 @@
     const flowHelpBtn = document.getElementById('flow-help-btn');
     const flowHelpModal = document.getElementById('flow-help-modal');
     const flowHelpClose = document.getElementById('flow-help-close');
+    const muteAllBtn = document.getElementById('mute-all-btn');
 
     // ====== RELÓGIO (HORÁRIO DO PC) ======
     function updateClock() {
@@ -911,10 +1142,10 @@
       } else {
         themeToggle.textContent = 'Modo claro';
       }
-      localStorage.setItem('timer_vbet_theme', theme);
+      localStorage.setItem('timer_sla_theme', theme);
     }
 
-    const savedTheme = localStorage.getItem('timer_vbet_theme') || 'dark';
+    const savedTheme = localStorage.getItem('timer_sla_theme') || 'dark';
     applyTheme(savedTheme);
 
     themeToggle.addEventListener('click', () => {
@@ -969,7 +1200,7 @@
       playAlarmPattern();
     });
 
-    // ====== UTILITÁRIOS DE TEMPO (CORRIGIDO PARA AM/PM) ======
+    // ====== UTILITÁRIOS DE TEMPO (AM/PM) ======
     function formatTime(ms) {
       if (ms < 0) ms = 0;
       const totalSec = Math.floor(ms / 1000);
@@ -980,25 +1211,20 @@
 
     function extractTimeString(str) {
       if (!str) return null;
-      // Expressão atualizada para capturar o horário E o AM/PM para o rótulo
       const match = str.trim().match(/(\d{1,2}:\d{2}(?::\d{2})?\s*(?:am|pm)?)/i);
       return match ? match[1] : null;
     }
 
     function parseTimeInputToTodayMillis(str) {
       if (!str) return null;
-      
-      // Expressão regular para capturar HH:MM(:SS) e opcionalmente AM/PM
       const match = str.trim().match(/(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(am|pm)?/i);
-      
       if (!match) return null;
-      
+
       let h = Number(match[1]);
       const m = Number(match[2]);
       const s = match[3] ? Number(match[3]) : 0;
-      const period = match[4] ? match[4].toLowerCase() : null; // 'am', 'pm' ou null
+      const period = match[4] ? match[4].toLowerCase() : null;
 
-      // Validação básica de minutos e segundos
       if (
         Number.isNaN(h) || Number.isNaN(m) || Number.isNaN(s) ||
         m < 0 || m > 59 || s < 0 || s > 59
@@ -1006,34 +1232,34 @@
         return null;
       }
 
-      // Lógica de conversão AM/PM para 24h
       if (period === 'pm' && h < 12) {
-        // Se for PM e a hora for menor que 12 (ex: 3 PM), adiciona 12h
         h += 12;
       } else if (period === 'am' && h === 12) {
-        // Se for 12 AM (meia-noite), a hora é 0
         h = 0;
       } else if (h === 24) {
-        // Se a entrada for 24:XX (excedente), ajusta para 00:XX (meia-noite)
         h = 0;
       } else if (h < 0 || h > 23) {
-        // Validação final da hora (após conversão AM/PM, se houver)
         return null;
       }
 
       const now = new Date();
-      // Cria o objeto Date para o dia de hoje com as horas, minutos e segundos ajustados
       const d = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m, s);
-      
       return d.getTime();
     }
-    
+
     function clearCardState(card) {
-      card.classList.remove("ok", "warn", "danger", "expired", "blink");
+      card.classList.remove("ok", "warn", "danger", "expired", "blink", "alarming");
       card.classList.add("idle");
       card.querySelector(".time").textContent = "00:00";
-      card.querySelector(".status-msg").textContent = "";
-      card.querySelector(".flow-msg").textContent = "";
+      const statusEl = card.querySelector(".status-msg");
+      if (statusEl) statusEl.textContent = "Nenhum timer ativo";
+      const flowEl = card.querySelector(".flow-msg");
+      if (flowEl) flowEl.textContent = "";
+      const soundBadge = card.querySelector(".sound-badge");
+      if (soundBadge) {
+        soundBadge.textContent = "";
+        soundBadge.classList.remove("sound-on", "sound-off");
+      }
     }
 
     function stopAlarm(id) {
@@ -1043,13 +1269,40 @@
         clearInterval(t.alarmInterval);
         t.alarmInterval = null;
       }
-      t.manualMuted = true; // não religar sozinho
+      t.manualMuted = true;
+      const card = document.querySelector(`.card[data-id="${id}"]`);
+      if (card) {
+        card.classList.remove("alarming");
+        const soundBadge = card.querySelector(".sound-badge");
+        if (soundBadge) {
+          if (card.classList.contains("expired")) {
+            soundBadge.textContent = "🔇 Silenciado";
+            soundBadge.classList.add("sound-off");
+            soundBadge.classList.remove("sound-on");
+          } else {
+            soundBadge.textContent = "";
+            soundBadge.classList.remove("sound-on", "sound-off");
+          }
+        }
+      }
     }
 
     function startAlarm(id) {
       const t = timers[id];
       if (!t || t.manualMuted) return;
       if (t.alarmInterval) return;
+
+      const card = document.querySelector(`.card[data-id="${id}"]`);
+      if (card) {
+        card.classList.add("alarming");
+        const soundBadge = card.querySelector(".sound-badge");
+        if (soundBadge) {
+          soundBadge.textContent = "🔊 Som ativo";
+          soundBadge.classList.add("sound-on");
+          soundBadge.classList.remove("sound-off");
+        }
+      }
+
       playAlarmPattern();
       t.alarmInterval = setInterval(() => {
         if (!t.manualMuted) {
@@ -1167,15 +1420,22 @@
         awaitingFlowConfirm: false,
         currentMinutes: minutes
       };
-      card.classList.remove("idle", "warn", "danger", "expired", "blink");
+
+      card.classList.remove("idle", "warn", "danger", "expired", "blink", "alarming");
       card.classList.add("ok");
 
       const status = card.querySelector(".status-msg");
-      status.textContent = ""; // sem texto extra
+      status.textContent = "";
       setFlowMessage(card, "");
       updateLastTimerDisplay(card, minutes, baseLabel);
       updateHistoryDisplay(card, trimmedHistory, minutes);
       highlightLastButton(card, minutes);
+
+      const soundBadge = card.querySelector(".sound-badge");
+      if (soundBadge) {
+        soundBadge.textContent = "";
+        soundBadge.classList.remove("sound-on", "sound-off");
+      }
 
       timers[id].interval = setInterval(() => {
         const t = timers[id];
@@ -1185,7 +1445,7 @@
         timeEl.textContent = formatTime(diff);
 
         const statusNow = card.querySelector(".status-msg");
-        card.classList.remove("ok", "warn", "danger", "expired", "blink");
+        card.classList.remove("ok", "warn", "danger", "expired", "blink", "alarming");
 
         if (diff > 60_000) {
           card.classList.add("ok");
@@ -1204,7 +1464,7 @@
             t.expiredNotified = true;
             startAlarm(id);
           }
-          handleFlowOnExpire(card, id); // trata fluxos de inatividade
+          handleFlowOnExpire(card, id);
         }
       }, 200);
     }
@@ -1236,12 +1496,12 @@
       highlightLastButton(card, null);
     }
 
-    // ====== FLUXOS DE INATIVIDADE (ATUALIZADO) ======
+    // ====== FLUXOS DE INATIVIDADE ======
     const FLOW_SEQUENCES = {
-      action: [5, 3, 2, 1],       // cliente em ação (longo)
-      action_short: [3, 2, 1],    // NOVO: cliente em ação (curto)
-      after_ok: [1],              // pós-resolutiva com OK
-      after_noresp: [2, 1]        // pós-resolutiva sem resposta
+      action: [5, 3, 2, 1],
+      action_short: [3, 2, 1],
+      after_ok: [1],
+      after_noresp: [2, 1]
     };
 
     function startFlowStep(card, flowType, step, opts = {}) {
@@ -1262,7 +1522,6 @@
       }
     }
 
-    // ATUALIZADO para incluir o fluxo action_short
     function handleFlowOnExpire(card, id) {
       const t = timers[id];
       if (!t || !t.flowType) return;
@@ -1270,7 +1529,7 @@
       const step = t.inactivityStep || 0;
       const seq = FLOW_SEQUENCES[flowType] || [];
       const flowEl = card.querySelector(".flow-msg");
-      
+
       const isActionFlow = flowType === 'action' || flowType === 'action_short';
 
       if (isActionFlow) {
@@ -1283,9 +1542,8 @@
             const nextMin = seq[nextStep];
             flowEl.innerHTML = `
               Hold de ${currentMin} min terminou.<br>
-              Você já respondeu o cliente para continuar o procedimento?<br>
-              <button class="flow-btn-small" data-flow-confirm="yes" data-next-step="${nextStep}">Já respondi, iniciar ${nextMin} min</button>
-              <button class="flow-btn-small" data-flow-confirm="no">Ainda não</button>
+              Depois de responder o cliente para continuar o procedimento, clique abaixo:<br>
+              <button class="flow-btn-small" data-next-step="${nextStep}">Já respondi, iniciar ${nextMin} min</button>
             `;
           }
         } else {
@@ -1299,9 +1557,8 @@
             t.awaitingFlowConfirm = true;
             flowEl.innerHTML = `
               Hold de 2 min terminou.<br>
-              Você já enviou "Posso ajudar em algo mais?" ao cliente?<br>
-              <button class="flow-btn-small" data-flow-confirm="yes" data-next-step="1">Já enviei, iniciar 1 min</button>
-              <button class="flow-btn-small" data-flow-confirm="no">Ainda não</button>
+              Depois de enviar "Posso ajudar em algo mais?" ao cliente, clique abaixo para iniciar 1 min:<br>
+              <button class="flow-btn-small" data-next-step="1">Já enviei, iniciar 1 min</button>
             `;
           }
         } else {
@@ -1334,6 +1591,7 @@
       const btnTimeAll = card.querySelectorAll(".btn-time");
       const btnCancel = card.querySelector(".btn-cancel");
       const btnMute = card.querySelector(".btn-mute");
+      const btnClear = card.querySelector(".btn-clear");
       const btnPasteTime = card.querySelector(".btn-paste-time");
       const labelInput = card.querySelector(".label-input");
       const timeInput = card.querySelector(".time-input");
@@ -1344,8 +1602,8 @@
       labelInput.addEventListener("focus", (e) => e.target.select());
       timeInput.addEventListener("focus", (e) => e.target.select());
 
-      // estado inicial: campo desativado
       setTimeFieldEnabled(card, fieldToggle.checked);
+      clearCardState(card);
 
       fieldToggle.addEventListener("change", () => {
         setTimeFieldEnabled(card, fieldToggle.checked);
@@ -1375,19 +1633,13 @@
       flowMsg.addEventListener("click", (e) => {
         const target = e.target;
         if (target.matches(".flow-btn-small")) {
-          const confirm = target.dataset.flowConfirm;
-          if (confirm === "yes") {
-            const nextStep = Number(target.dataset.nextStep || 0);
-            const t = timers[id];
-            if (!t || !t.flowType) return;
-            // próximos passos sempre a partir de agora
-            startFlowStep(card, t.flowType, nextStep, {
-              useFieldBase: false
-            });
-            setFlowMessage(card, "Próximo hold iniciado a partir da sua última resposta.");
-          } else {
-            setFlowMessage(card, "Quando você responder o cliente, clique no botão para iniciar o próximo hold.");
-          }
+          const nextStep = Number(target.dataset.nextStep || 0);
+          const t = timers[id];
+          if (!t || !t.flowType) return;
+          startFlowStep(card, t.flowType, nextStep, {
+            useFieldBase: false
+          });
+          setFlowMessage(card, "Próximo hold iniciado a partir da sua última resposta.");
         }
       });
 
@@ -1401,6 +1653,14 @@
         if (card.classList.contains("expired")) {
           status.textContent = "Tempo esgotado (alarme silenciado)";
         }
+      });
+
+      btnClear.addEventListener("click", () => {
+        labelInput.value = "";
+        timeInput.value = "";
+        fieldToggle.checked = false;
+        setTimeFieldEnabled(card, fieldToggle.checked);
+        labelInput.focus();
       });
 
       btnPasteTime.addEventListener("click", async () => {
@@ -1421,6 +1681,20 @@
         } catch (e) {
           console.log(e);
           alert("Não consegui ler o clipboard. Cole manualmente (Ctrl+V).");
+        }
+      });
+    });
+
+    // ====== BOTÃO SILENCIAR TODOS ======
+    muteAllBtn.addEventListener("click", () => {
+      Object.keys(timers).forEach(id => {
+        const card = document.querySelector(`.card[data-id="${id}"]`);
+        stopAlarm(id);
+        if (card && card.classList.contains("expired")) {
+          const status = card.querySelector(".status-msg");
+          if (status && status.textContent.includes("TEMPO ESGOTADO")) {
+            status.textContent = "Tempo esgotado (alarme silenciado)";
+          }
         }
       });
     });
