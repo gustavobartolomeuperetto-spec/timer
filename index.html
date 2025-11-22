@@ -313,6 +313,7 @@
       white-space: nowrap;
     }
 
+    /* Identificação mais destaque */
     .label-input {
       flex: 1;
       padding: 5px 7px;
@@ -565,7 +566,6 @@
       flex: 1 1 48%;
       padding: 6px;
       font-size: 0.8rem;
-      border: none;
       border-radius: 999px;
       font-weight: 600;
       cursor: pointer;
@@ -762,7 +762,7 @@
 
     body.theme-light .flow-btn-small {
       background: #111827;
-      color: #f9f9fb;
+      color: #f9fafb;
     }
   </style>
 </head>
@@ -1072,7 +1072,6 @@
     let audioCtx = null;
     let alarmVolume = 0.7;
     let soundType = 'triple';
-    let notificationsEnabled = false; // <--- controle de notificação
 
     const volumeSlider = document.getElementById('volume');
     const volumeValue = document.getElementById('volume-value');
@@ -1088,39 +1087,9 @@
     const flowHelpClose = document.getElementById('flow-help-close');
     const muteAllBtn = document.getElementById('mute-all-btn');
 
-    // ====== NOTIFICAÇÕES DESKTOP ======
-    if ('Notification' in window) {
-      if (Notification.permission === 'granted') {
-        notificationsEnabled = true;
-      } else if (Notification.permission === 'default') {
-        Notification.requestPermission().then((perm) => {
-          notificationsEnabled = perm === 'granted';
-        }).catch(() => {});
-      } else {
-        notificationsEnabled = false;
-      }
-    }
-
-    function showExpireNotification(id) {
-      if (!('Notification' in window)) return;
-      if (!notificationsEnabled) return;
-
-      const card = document.querySelector(`.card[data-id="${id}"]`);
-      if (!card) return;
-
-      const labelInput = card.querySelector('.label-input');
-      const ident = (labelInput?.value || '').trim();
-
-      const title = 'Timer SLA – tempo esgotado';
-      const body = ident
-        ? `Chat ${id} – ${ident}`
-        : `Chat ${id}: responda o cliente e encerre o hold.`;
-
-      try {
-        new Notification(title, { body });
-      } catch (e) {
-        console.log('Falha ao mostrar notificação:', e);
-      }
+    // ==== PERMISSÃO DE NOTIFICAÇÃO (CASO AINDA ESTEJA "default") ====
+    if ('Notification' in window && Notification.permission === 'default') {
+      Notification.requestPermission().catch(() => {});
     }
 
     // ====== RELÓGIO (HORÁRIO DO PC) ======
@@ -1167,11 +1136,7 @@
     function applyTheme(theme) {
       document.body.classList.remove('theme-dark', 'theme-light');
       document.body.classList.add(theme === 'light' ? 'theme-light' : 'theme-dark');
-      if (theme === 'light') {
-        themeToggle.textContent = 'Modo escuro';
-      } else {
-        themeToggle.textContent = 'Modo claro';
-      }
+      themeToggle.textContent = theme === 'light' ? 'Modo escuro' : 'Modo claro';
       localStorage.setItem('timer_sla_theme', theme);
     }
 
@@ -1228,15 +1193,28 @@
 
     testBtn.addEventListener('click', () => {
       playAlarmPattern();
-      // reforça pedido de permissão de notificação após interação
-      if ('Notification' in window && Notification.permission === 'default') {
-        Notification.requestPermission().then((perm) => {
-          notificationsEnabled = perm === 'granted';
-        }).catch(() => {});
-      }
     });
 
-    // ====== UTILITÁRIOS DE TEMPO (AM/PM) ======
+    // ====== NOTIFICAÇÃO VISUAL (DESKTOP) ======
+    function showTimerNotification(card, id) {
+      if (!('Notification' in window)) return;
+      if (Notification.permission !== 'granted') return;
+
+      const labelInput = card.querySelector('.label-input');
+      const ident = (labelInput && labelInput.value.trim()) || `Chat ${id}`;
+
+      try {
+        new Notification('Timer SLA – tempo esgotado', {
+          body: `Tempo esgotado para ${ident}. Responda o cliente e depois silencie o alarme.`,
+          tag: `timer-sla-chat-${id}`, // evita spam (substitui da mesma tag)
+          renotify: true
+        });
+      } catch (e) {
+        console.log('Falha ao criar notificação:', e);
+      }
+    }
+
+    // ====== UTILITÁRIOS DE TEMPO ======
     function formatTime(ms) {
       if (ms < 0) ms = 0;
       const totalSec = Math.floor(ms / 1000);
@@ -1454,7 +1432,8 @@
         inactivityStep: options.inactivityStep ?? 0,
         flowType: options.flowType || null,
         awaitingFlowConfirm: false,
-        currentMinutes: minutes
+        currentMinutes: minutes,
+        notifiedOnce: false
       };
 
       card.classList.remove("idle", "warn", "danger", "expired", "blink", "alarming");
@@ -1496,11 +1475,19 @@
           card.classList.add("expired");
           timeEl.textContent = "00:00";
           statusNow.textContent = "TEMPO ESGOTADO – responda e depois silencie o alarme";
-          if (!t.expiredNotified && !t.manualMuted) {
+
+          if (!t.expiredNotified) {
             t.expiredNotified = true;
-            startAlarm(id);
-            showExpireNotification(id); // <--- AQUI DISPARA A NOTIFICAÇÃO
+
+            // Notificação desktop
+            showTimerNotification(card, id);
+
+            // Som só se não estiver manualmente mutado
+            if (!t.manualMuted) {
+              startAlarm(id);
+            }
           }
+
           handleFlowOnExpire(card, id);
         }
       }, 200);
@@ -1525,7 +1512,8 @@
         inactivityStep: 0,
         flowType: null,
         awaitingFlowConfirm: false,
-        currentMinutes: null
+        currentMinutes: null,
+        notifiedOnce: false
       };
       clearCardState(card);
       updateLastTimerDisplay(card, null, null);
