@@ -85,7 +85,6 @@
     .test-btn,
     .theme-btn,
     .help-btn,
-    .flow-help-btn,
     .mute-all-btn {
       padding: 4px 10px;
       border-radius: 999px;
@@ -124,16 +123,6 @@
     body.theme-light .help-btn {
       background: #d1d5db;
       color: #111827;
-    }
-
-    body.theme-dark .flow-help-btn {
-      background: #1d4ed8;
-      color: #e5e7eb;
-    }
-
-    body.theme-light .flow-help-btn {
-      background: #3b82f6;
-      color: #f9f9ff;
     }
 
     body.theme-dark .mute-all-btn {
@@ -313,7 +302,6 @@
       white-space: nowrap;
     }
 
-    /* Identificação mais destaque */
     .label-input {
       flex: 1;
       padding: 5px 7px;
@@ -566,6 +554,7 @@
       flex: 1 1 48%;
       padding: 6px;
       font-size: 0.8rem;
+      border: none;
       border-radius: 999px;
       font-weight: 600;
       cursor: pointer;
@@ -675,8 +664,7 @@
       color: #4b5563;
     }
 
-    .help-modal,
-    .flow-help-modal {
+    .help-modal {
       position: fixed;
       inset: 0;
       background: rgba(15, 23, 42, 0.8);
@@ -686,8 +674,7 @@
       z-index: 50;
     }
 
-    .help-modal.open,
-    .flow-help-modal.open {
+    .help-modal.open {
       display: flex;
     }
 
@@ -762,7 +749,7 @@
 
     body.theme-light .flow-btn-small {
       background: #111827;
-      color: #f9fafb;
+      color: #f9f9fb;
     }
   </style>
 </head>
@@ -792,7 +779,6 @@
     <button class="mute-all-btn" id="mute-all-btn">Silenciar todos</button>
     <button class="theme-btn" id="theme-toggle">Modo claro</button>
     <button class="help-btn" id="help-btn">Ajuda geral</button>
-    <button class="flow-help-btn" id="flow-help-btn">Ajuda fluxos</button>
   </div>
 
   <div class="grid">
@@ -1035,35 +1021,21 @@
     <div class="help-content">
       <div class="help-title">Ajuda geral</div>
       <ul class="help-list">
-        <li>Cada card representa um chat diferente.</li>
-        <li>Em <b>Identificação</b>, coloque o nome do cliente ou o assunto (ex: GUILHERME / SAQUE).</li>
-        <li>O campo <b>Hora msg</b> é opcional; para que ele conte no timer, ative “Usar horário do campo”.</li>
-        <li>Botões <b>+1, +2, +3, +5</b> iniciam um hold manual.</li>
-        <li>Se “Usar horário do campo” estiver ligado, o hold conta a partir do horário digitado; caso contrário, conta a partir de agora.</li>
-        <li>Os botões de fluxo (como <b>Ação 5-3-2-1</b>, <b>Ação 3-2-1</b>, etc.) seguem fluxos de inatividade específicos (veja em “Ajuda fluxos”).</li>
-        <li>Quando o tempo zera, o card fica vermelho e o alarme toca até clicar em <b>Silenciar</b> ou <b>Silenciar todos</b>.</li>
-        <li><b>Cancelar</b> limpa o timer daquele chat, mas mantém o histórico de holds.</li>
-        <li><b>Arraste</b> um card para trocar a posição dele com outro.</li>
+        <li>Cada card representa um chat independente.</li>
+        <li>Em <b>Identificação</b>, coloque o nome do cliente ou o assunto (ex.: JOÃO / SAQUE PIX).</li>
+        <li>O campo <b>Hora msg</b> é opcional. Se você ativar “Usar horário do campo”, o timer começará a contar a partir do horário digitado. Se estiver desligado, o timer começa imediatamente.</li>
+        <li>Os botões <b>+1, +2, +3, +5</b> iniciam timers manuais para segurar o chat em hold.</li>
+        <li>Quando o tempo zera, o card fica vermelho e o alarme toca continuamente até você clicar em <b>Silenciar</b> ou <b>Silenciar todos</b>.</li>
+        <li>O botão <b>Limpar campos</b> apaga identificação e hora, mas não apaga o histórico de timers.</li>
+        <li>O botão <b>Cancelar</b> encerra o timer atual e deixa o card em estado neutro (idle), mantendo o histórico.</li>
+        <li>A barrinha colorida na lateral identifica cada chat e ajuda a diferenciar visualmente.</li>
+        <li>Você pode arrastar qualquer card para reorganizar a ordem dos chats.</li>
+        <li>O volume, o tipo de som e o tema (claro/escuro) podem ser ajustados no topo da tela.</li>
+        <li>Ao colar um horário no campo “Hora msg”, você pode usar o botão <b>Colar</b> ou simplesmente usar CTRL+V.</li>
+        <li>As notificações do navegador, quando permitidas, mostram o nome do cliente que você colocou em <b>Identificação</b>, junto com o número do chat.</li>
+        <li>Os botões de <b>fluxo de inatividade</b> (Ação 5-3-2-1, Ação 3-2-1, Fech. OK, Fech. 2+1) apenas automatizam sequências de holds; você pode usá-los normalmente sem precisar decorar a lógica completa.</li>
       </ul>
       <button id="help-close" class="help-close">Fechar</button>
-    </div>
-  </div>
-
-  <div id="flow-help-modal" class="flow-help-modal">
-    <div class="help-content">
-      <div class="help-title">Ajuda – fluxos de inatividade</div>
-      <ul class="help-list">
-        <li><b>Ação 5-3-2-1</b>: Cliente executando um passo a passo mais longo.</li>
-        <li>Fluxo: 5 min → 3 min → 2 min → 1 min.</li>
-        <li><b>Ação 3-2-1</b>: Cliente executando um passo a passo mais curto.</li>
-        <li>Fluxo: 3 min → 2 min → 1 min.</li>
-        <li><b>Regra para "Ação" (5-3-2-1 e 3-2-1):</b> O primeiro hold pode usar o horário do campo (se “Usar horário do campo” estiver ligado). Os próximos holds sempre começam quando você clica em "Já respondi, iniciar X min".</li>
-        <li><b>Fech. OK (1)</b>: Após o cliente confirmar que ficou tudo certo (“ok”, “tudo certo”).</li>
-        <li>Você pergunta se pode ajudar em algo mais, inicia o fluxo, e o timer segura 1 minuto (usando o horário do campo se o modo estiver ligado, senão a partir de agora).</li>
-        <li><b>Fech. 2+1</b>: Após enviar a resolutiva quando o cliente não responde.</li>
-        <li>Primeiro hold de 2 minutos (podendo usar o horário do campo); ao acabar, você envia “Posso ajudar em algo mais?” e o timer faz o segundo hold de 1 minuto a partir do clique.</li>
-      </ul>
-      <button id="flow-help-close" class="help-close">Fechar</button>
     </div>
   </div>
 
@@ -1072,6 +1044,7 @@
     let audioCtx = null;
     let alarmVolume = 0.7;
     let soundType = 'triple';
+    let notificationsEnabled = false; // controle de notificação
 
     const volumeSlider = document.getElementById('volume');
     const volumeValue = document.getElementById('volume-value');
@@ -1082,14 +1055,41 @@
     const helpBtn = document.getElementById('help-btn');
     const helpModal = document.getElementById('help-modal');
     const helpClose = document.getElementById('help-close');
-    const flowHelpBtn = document.getElementById('flow-help-btn');
-    const flowHelpModal = document.getElementById('flow-help-modal');
-    const flowHelpClose = document.getElementById('flow-help-close');
     const muteAllBtn = document.getElementById('mute-all-btn');
 
-    // ==== PERMISSÃO DE NOTIFICAÇÃO (CASO AINDA ESTEJA "default") ====
-    if ('Notification' in window && Notification.permission === 'default') {
-      Notification.requestPermission().catch(() => {});
+    // ====== NOTIFICAÇÕES DESKTOP ======
+    if ('Notification' in window) {
+      if (Notification.permission === 'granted') {
+        notificationsEnabled = true;
+      } else if (Notification.permission === 'default') {
+        Notification.requestPermission().then((perm) => {
+          notificationsEnabled = perm === 'granted';
+        }).catch(() => {});
+      } else {
+        notificationsEnabled = false;
+      }
+    }
+
+    function showExpireNotification(id) {
+      if (!('Notification' in window)) return;
+      if (!notificationsEnabled) return;
+
+      const card = document.querySelector(`.card[data-id="${id}"]`);
+      if (!card) return;
+
+      const labelInput = card.querySelector('.label-input');
+      const ident = (labelInput?.value || '').trim();
+
+      const title = 'Timer SLA – tempo esgotado';
+      const body = ident
+        ? `Chat ${id} – ${ident}`
+        : `Chat ${id}: responda o cliente e encerre o hold.`;
+
+      try {
+        new Notification(title, { body });
+      } catch (e) {
+        console.log('Falha ao mostrar notificação:', e);
+      }
     }
 
     // ====== RELÓGIO (HORÁRIO DO PC) ======
@@ -1118,25 +1118,15 @@
       }
     });
 
-    flowHelpBtn.addEventListener('click', () => {
-      flowHelpModal.classList.add('open');
-    });
-
-    flowHelpClose.addEventListener('click', () => {
-      flowHelpModal.classList.remove('open');
-    });
-
-    flowHelpModal.addEventListener('click', (e) => {
-      if (e.target === flowHelpModal) {
-        flowHelpModal.classList.remove('open');
-      }
-    });
-
     // ====== TEMA (DIA/NOITE) ======
     function applyTheme(theme) {
       document.body.classList.remove('theme-dark', 'theme-light');
       document.body.classList.add(theme === 'light' ? 'theme-light' : 'theme-dark');
-      themeToggle.textContent = theme === 'light' ? 'Modo escuro' : 'Modo claro';
+      if (theme === 'light') {
+        themeToggle.textContent = 'Modo escuro';
+      } else {
+        themeToggle.textContent = 'Modo claro';
+      }
       localStorage.setItem('timer_sla_theme', theme);
     }
 
@@ -1193,28 +1183,15 @@
 
     testBtn.addEventListener('click', () => {
       playAlarmPattern();
+      // reforça pedido de permissão de notificação após interação
+      if ('Notification' in window && Notification.permission === 'default') {
+        Notification.requestPermission().then((perm) => {
+          notificationsEnabled = perm === 'granted';
+        }).catch(() => {});
+      }
     });
 
-    // ====== NOTIFICAÇÃO VISUAL (DESKTOP) ======
-    function showTimerNotification(card, id) {
-      if (!('Notification' in window)) return;
-      if (Notification.permission !== 'granted') return;
-
-      const labelInput = card.querySelector('.label-input');
-      const ident = (labelInput && labelInput.value.trim()) || `Chat ${id}`;
-
-      try {
-        new Notification('Timer SLA – tempo esgotado', {
-          body: `Tempo esgotado para ${ident}. Responda o cliente e depois silencie o alarme.`,
-          tag: `timer-sla-chat-${id}`, // evita spam (substitui da mesma tag)
-          renotify: true
-        });
-      } catch (e) {
-        console.log('Falha ao criar notificação:', e);
-      }
-    }
-
-    // ====== UTILITÁRIOS DE TEMPO ======
+    // ====== UTILITÁRIOS DE TEMPO (AM/PM) ======
     function formatTime(ms) {
       if (ms < 0) ms = 0;
       const totalSec = Math.floor(ms / 1000);
@@ -1432,8 +1409,7 @@
         inactivityStep: options.inactivityStep ?? 0,
         flowType: options.flowType || null,
         awaitingFlowConfirm: false,
-        currentMinutes: minutes,
-        notifiedOnce: false
+        currentMinutes: minutes
       };
 
       card.classList.remove("idle", "warn", "danger", "expired", "blink", "alarming");
@@ -1475,19 +1451,11 @@
           card.classList.add("expired");
           timeEl.textContent = "00:00";
           statusNow.textContent = "TEMPO ESGOTADO – responda e depois silencie o alarme";
-
-          if (!t.expiredNotified) {
+          if (!t.expiredNotified && !t.manualMuted) {
             t.expiredNotified = true;
-
-            // Notificação desktop
-            showTimerNotification(card, id);
-
-            // Som só se não estiver manualmente mutado
-            if (!t.manualMuted) {
-              startAlarm(id);
-            }
+            startAlarm(id);
+            showExpireNotification(id);
           }
-
           handleFlowOnExpire(card, id);
         }
       }, 200);
@@ -1512,8 +1480,7 @@
         inactivityStep: 0,
         flowType: null,
         awaitingFlowConfirm: false,
-        currentMinutes: null,
-        notifiedOnce: false
+        currentMinutes: null
       };
       clearCardState(card);
       updateLastTimerDisplay(card, null, null);
