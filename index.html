@@ -85,7 +85,6 @@
     .test-btn,
     .theme-btn,
     .help-btn,
-    .flow-help-btn,
     .mute-all-btn {
       padding: 4px 10px;
       border-radius: 999px;
@@ -124,16 +123,6 @@
     body.theme-light .help-btn {
       background: #d1d5db;
       color: #111827;
-    }
-
-    body.theme-dark .flow-help-btn {
-      background: #1d4ed8;
-      color: #e5e7eb;
-    }
-
-    body.theme-light .flow-help-btn {
-      background: #3b82f6;
-      color: #f9f9ff;
     }
 
     body.theme-dark .mute-all-btn {
@@ -681,8 +670,7 @@
     }
 
     /* Ajuda / modal */
-    .help-modal,
-    .flow-help-modal {
+    .help-modal {
       position: fixed;
       inset: 0;
       background: rgba(15, 23, 42, 0.8);
@@ -692,8 +680,7 @@
       z-index: 50;
     }
 
-    .help-modal.open,
-    .flow-help-modal.open {
+    .help-modal.open {
       display: flex;
     }
 
@@ -798,7 +785,6 @@
     <button class="mute-all-btn" id="mute-all-btn">Silenciar todos</button>
     <button class="theme-btn" id="theme-toggle">Modo claro</button>
     <button class="help-btn" id="help-btn">Ajuda geral</button>
-    <button class="flow-help-btn" id="flow-help-btn">Ajuda fluxos</button>
   </div>
 
   <div class="grid">
@@ -1044,32 +1030,14 @@
         <li>Cada card representa um chat diferente.</li>
         <li>Em <b>Identificação</b>, coloque o nome do cliente ou o assunto (ex: GUILHERME / SAQUE).</li>
         <li>O campo <b>Hora msg</b> é opcional; para que ele conte no timer, ative “Usar horário do campo”.</li>
-        <li>Botões <b>+1, +2, +3, +5</b> iniciam um hold manual.</li>
+        <li>Botões <b>+1, +2, +3, +5</b> iniciam um hold manual de X minutos.</li>
         <li>Se “Usar horário do campo” estiver ligado, o hold conta a partir do horário digitado; caso contrário, conta a partir de agora.</li>
-        <li>Os botões de fluxo (como <b>Ação 5-3-2-1</b>, <b>Ação 3-2-1</b>, etc.) seguem fluxos de inatividade específicos (veja em “Ajuda fluxos”).</li>
-        <li>Quando o tempo zera, o card fica vermelho e o alarme toca até clicar em <b>Silenciar</b> ou <b>Silenciar todos</b>.</li>
+        <li>Os botões de fluxo (<b>Ação 5-3-2-1</b>, <b>Ação 3-2-1</b>, <b>Fech. OK (1)</b>, <b>Fech. 2+1</b>) servem para seguir fluxos padrão de inatividade (quando o cliente demora a responder ou para encerrar o chat).</li>
+        <li>Quando o tempo zera, o card fica vermelho, o alarme toca e aparece um aviso de tempo esgotado. Você pode silenciar no botão <b>Silenciar</b> ou <b>Silenciar todos</b>.</li>
         <li><b>Cancelar</b> limpa o timer daquele chat, mas mantém o histórico de holds.</li>
         <li><b>Arraste</b> um card para trocar a posição dele com outro.</li>
       </ul>
       <button id="help-close" class="help-close">Fechar</button>
-    </div>
-  </div>
-
-  <div id="flow-help-modal" class="flow-help-modal">
-    <div class="help-content">
-      <div class="help-title">Ajuda – fluxos de inatividade</div>
-      <ul class="help-list">
-        <li><b>Ação 5-3-2-1</b>: Cliente executando um passo a passo mais longo.</li>
-        <li>Fluxo: 5 min → 3 min → 2 min → 1 min.</li>
-        <li><b>Ação 3-2-1</b>: Cliente executando um passo a passo mais curto.</li>
-        <li>Fluxo: 3 min → 2 min → 1 min.</li>
-        <li><b>Regra para "Ação" (5-3-2-1 e 3-2-1):</b> O primeiro hold pode usar o horário do campo (se “Usar horário do campo” estiver ligado). Os próximos holds sempre começam quando você clica em "Já respondi, iniciar X min".</li>
-        <li><b>Fech. OK (1)</b>: Após o cliente confirmar que ficou tudo certo (“ok”, “tudo certo”).</li>
-        <li>Você pergunta se pode ajudar em algo mais, inicia o fluxo, e o timer segura 1 minuto (usando o horário do campo se o modo estiver ligado, senão a partir de agora).</li>
-        <li><b>Fech. 2+1</b>: Após enviar a resolutiva quando o cliente não responde.</li>
-        <li>Primeiro hold de 2 minutos (podendo usar o horário do campo); ao acabar, você envia “Posso ajudar em algo mais?” e o timer faz o segundo hold de 1 minuto a partir do clique.</li>
-      </ul>
-      <button id="flow-help-close" class="help-close">Fechar</button>
     </div>
   </div>
 
@@ -1088,9 +1056,6 @@
     const helpBtn = document.getElementById('help-btn');
     const helpModal = document.getElementById('help-modal');
     const helpClose = document.getElementById('help-close');
-    const flowHelpBtn = document.getElementById('flow-help-btn');
-    const flowHelpModal = document.getElementById('flow-help-modal');
-    const flowHelpClose = document.getElementById('flow-help-close');
     const muteAllBtn = document.getElementById('mute-all-btn');
 
     // ====== RELÓGIO (HORÁRIO DO PC) ======
@@ -1116,20 +1081,6 @@
     helpModal.addEventListener('click', (e) => {
       if (e.target === helpModal) {
         helpModal.classList.remove('open');
-      }
-    });
-
-    flowHelpBtn.addEventListener('click', () => {
-      flowHelpModal.classList.add('open');
-    });
-
-    flowHelpClose.addEventListener('click', () => {
-      flowHelpModal.classList.remove('open');
-    });
-
-    flowHelpModal.addEventListener('click', (e) => {
-      if (e.target === flowHelpModal) {
-        flowHelpModal.classList.remove('open');
       }
     });
 
@@ -1198,6 +1149,10 @@
 
     testBtn.addEventListener('click', () => {
       playAlarmPattern();
+      // opcional: já pedir permissão de notificação quando testar
+      if ("Notification" in window && Notification.permission === "default") {
+        Notification.requestPermission();
+      }
     });
 
     // ====== UTILITÁRIOS DE TEMPO (AM/PM) ======
@@ -1309,6 +1264,29 @@
           playAlarmPattern();
         }
       }, 1500);
+    }
+
+    // ====== POPUP DE NOTIFICAÇÃO (HTML5 NOTIFICATIONS) ======
+    function showExpireNotification(card, id) {
+      if (!("Notification" in window)) return;
+
+      const labelInput = card.querySelector(".label-input");
+      const label = labelInput && labelInput.value.trim()
+        ? labelInput.value.trim()
+        : `Chat ${id}`;
+
+      const body = `Tempo esgotado para ${label}.`;
+
+      if (Notification.permission === "granted") {
+        new Notification("Timer SLA", { body });
+      } else if (Notification.permission === "default") {
+        Notification.requestPermission().then((perm) => {
+          if (perm === "granted") {
+            new Notification("Timer SLA", { body });
+          }
+        });
+      }
+      // se for "denied", não faz nada
     }
 
     function updateHistoryDisplay(card, historyArr, currentMinutes) {
@@ -1463,6 +1441,8 @@
           if (!t.expiredNotified && !t.manualMuted) {
             t.expiredNotified = true;
             startAlarm(id);
+            // POPUP ao estourar
+            showExpireNotification(card, id);
           }
           handleFlowOnExpire(card, id);
         }
