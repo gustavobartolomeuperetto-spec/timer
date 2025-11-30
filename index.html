@@ -11,9 +11,9 @@
       --brand-dark-bg: #050816;
       --brand-card-dark: #0b1120;
       --brand-card-border-dark: #1f2937;
-      --brand-light-bg: #f9fafb;
-      --brand-card-light: #ffffff;
-      --brand-card-border-light: #e5e7eb;
+      --brand-light-bg: #e5e7eb;
+      --brand-card-light: #f9fafb;
+      --brand-card-border-light: #d1d5db;
     }
 
     * {
@@ -37,14 +37,15 @@
     }
 
     h1 {
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       text-align: center;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
+      font-weight: 700;
     }
 
     .clock {
       text-align: center;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-weight: 600;
       opacity: 0.9;
       margin-bottom: 10px;
@@ -85,7 +86,8 @@
     .test-btn,
     .theme-btn,
     .help-btn,
-    .mute-all-btn {
+    .mute-all-btn,
+    .layout-btn {
       padding: 4px 10px;
       border-radius: 999px;
       border: none;
@@ -135,21 +137,201 @@
       color: #ffffff;
     }
 
+    body.theme-dark .layout-btn {
+      background: #111827;
+      color: #f9fafb;
+    }
+
+    body.theme-light .layout-btn {
+      background: #ffffff;
+      color: #111827;
+      border: 1px solid #d1d5db;
+    }
+
+    /* ====== LAYOUT / NAV ====== */
+
+    .layout-container {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .chat-nav {
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 95px;
+    }
+
+    /* Nav fixa e mais central na vertical no layout vertical */
+    .layout-vertical .chat-nav {
+      position: sticky;
+      top: 50%;
+      transform: translateY(-50%);
+      align-self: flex-start;
+    }
+
+    .chat-nav-btn {
+      width: 100%;
+      padding: 6px 8px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font-size: 0.72rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      opacity: 0.97;
+      transition: box-shadow 0.15s, transform 0.15s, background 0.15s;
+    }
+
+    body.theme-dark .chat-nav-btn {
+      background: rgba(15, 23, 42, 0.8);
+      border-color: #1f2937;
+      color: #e5e7eb;
+    }
+
+    body.theme-light .chat-nav-btn {
+      background: rgba(255, 255, 255, 0.9);
+      border-color: #e5e7eb;
+      color: #111827;
+      backdrop-filter: blur(4px);
+    }
+
+    .chat-nav-name {
+      max-width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .chat-nav-time {
+      font-size: 0.7rem;
+      letter-spacing: 0.02em;
+      opacity: 0.9;
+    }
+
+    body.theme-dark .chat-nav-time {
+      color: #e5e7eb;
+    }
+    body.theme-light .chat-nav-time {
+      color: #111827;
+    }
+
+    .chat-nav-btn.active {
+      box-shadow: 0 0 0 2px rgba(148, 163, 184, 0.95);
+      transform: translateY(-1px);
+    }
+
+    /* Estados por botão (uma cor só) */
+
+    /* IDLE */
+    body.theme-dark .chat-nav-btn.nav-idle {
+      background: rgba(148, 163, 184, 0.25);
+      color: #e5e7eb;
+    }
+    body.theme-light .chat-nav-btn.nav-idle {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    /* OK */
+    body.theme-dark .chat-nav-btn.nav-ok {
+      background: rgba(34, 197, 94, 0.35);
+      color: #bbf7d0;
+    }
+    body.theme-light .chat-nav-btn.nav-ok {
+      background: #bbf7d0;
+      color: #14532d;
+    }
+
+    /* WARN */
+    body.theme-dark .chat-nav-btn.nav-warn {
+      background: rgba(245, 158, 11, 0.4);
+      color: #fef3c7;
+    }
+    body.theme-light .chat-nav-btn.nav-warn {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    /* DANGER */
+    body.theme-dark .chat-nav-btn.nav-danger {
+      background: rgba(248, 113, 113, 0.5);
+      color: #fee2e2;
+    }
+    body.theme-light .chat-nav-btn.nav-danger {
+      background: #fecaca;
+      color: #7f1d1d;
+    }
+
+    /* EXPIRED */
+    body.theme-dark .chat-nav-btn.nav-expired {
+      background: rgba(185, 28, 28, 0.7);
+      color: #fee2e2;
+    }
+    body.theme-light .chat-nav-btn.nav-expired {
+      background: #fee2e2;
+      color: #7f1d1d;
+    }
+
+    .chat-nav-btn.nav-blink {
+      animation: navBlink 0.6s steps(1) infinite;
+    }
+
+    @keyframes navBlink {
+      50% {
+        opacity: 0.35;
+      }
+    }
+
     .grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 10px;
+      gap: 14px;
+      flex: 1;
     }
 
     @media (min-width: 750px) {
-      .grid {
+      .layout-horizontal .grid {
         grid-template-columns: 1fr 1fr;
       }
     }
 
+    /* Layout vertical: cards mais estreitos, centralizados e snap 1 por vez */
+    .layout-vertical .grid {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      align-items: center;
+      max-height: calc(100vh - 140px);
+      overflow-y: auto;
+      padding-right: 4px;
+      scroll-snap-type: y mandatory;
+    }
+
+    .layout-vertical .grid .card {
+      width: 100%;
+      max-width: 520px;
+      scroll-snap-align: center;
+    }
+
+    .layout-horizontal .chat-nav {
+      display: none;
+    }
+
+    .layout-vertical .chat-nav {
+      display: flex;
+    }
+
+    /* ====== CARDS ====== */
+
     .card {
       border-radius: 12px;
-      padding: 10px;
+      padding: 12px;
       position: relative;
       transition: background 0.2s, box-shadow 0.2s, border-color 0.2s, transform 0.1s, opacity 0.1s;
       display: flex;
@@ -157,7 +339,6 @@
       gap: 4px;
     }
 
-    /* Barrinha colorida fixa por chat */
     .card::before {
       content: "";
       position: absolute;
@@ -169,19 +350,19 @@
     }
 
     .card[data-id="1"]::before {
-      background: #a855f7; /* roxo */
+      background: #a855f7;
     }
 
     .card[data-id="2"]::before {
-      background: #3b82f6; /* azul */
+      background: #3b82f6;
     }
 
     .card[data-id="3"]::before {
-      background: #22c55e; /* verde */
+      background: #22c55e;
     }
 
     .card[data-id="4"]::before {
-      background: #f97316; /* laranja */
+      background: #f97316;
     }
 
     body.theme-dark .card {
@@ -196,7 +377,6 @@
       box-shadow: 0 10px 25px rgba(15, 23, 42, 0.15);
     }
 
-    /* Estado idle bem apagado / neutro */
     body.theme-dark .card.idle {
       background: #020617;
       border-color: #1f2937;
@@ -204,15 +384,15 @@
     }
 
     body.theme-light .card.idle {
-      background: #f9fafb;
+      background: #ffffff;
       border-color: #e5e7eb;
       opacity: 1;
     }
 
     .card-title {
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       font-weight: 700;
-      margin-bottom: 2px;
+      margin-bottom: 4px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -238,14 +418,13 @@
     }
 
     body.theme-dark .card-title {
-      color: #f9fafb;
+      color: #f9f9fb;
     }
 
     body.theme-light .card-title {
       color: #111827;
     }
 
-    /* Bolinha de status */
     .status-dot {
       width: 10px;
       height: 10px;
@@ -270,7 +449,6 @@
       background: #ef4444;
     }
 
-    /* Badge de som */
     .sound-badge {
       font-size: 0.7rem;
       padding: 2px 8px;
@@ -297,7 +475,7 @@
 
     .label-row span,
     .time-input-row span {
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       opacity: 0.75;
       white-space: nowrap;
     }
@@ -328,9 +506,9 @@
 
     body.theme-light .label-input,
     body.theme-light .time-input {
-      background: #f9fafb;
+      background: #f1f5f9;
       color: #111827;
-      border-color: #cbd5f5;
+      border-color: #cbd5e1;
     }
 
     .time-input::placeholder {
@@ -375,10 +553,11 @@
     }
 
     .time {
-      font-size: 2rem;
+      font-size: 2.2rem;
       font-weight: 800;
       text-align: center;
-      margin: 4px 0 2px 0;
+      margin: 6px 0 4px 0;
+      letter-spacing: 0.04em;
     }
 
     .last-timer,
@@ -393,20 +572,26 @@
 
     .last-timer {
       font-weight: 600;
-      margin-top: 0;
+      margin-top: 2px;
+      margin-bottom: 2px;
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 999px;
     }
 
     body.theme-dark .last-timer {
-      color: var(--brand-magenta-light);
+      background: rgba(148, 163, 184, 0.25);
+      color: #e5e7eb;
     }
 
     body.theme-light .last-timer {
-      color: var(--brand-magenta);
+      background: rgba(148, 163, 184, 0.25);
+      color: #111827;
     }
 
     .history-msg {
-      opacity: 0.9;
-      font-size: 0.8rem;
+      opacity: 0.75;
+      font-size: 0.7rem;
       margin-top: 2px;
     }
 
@@ -420,9 +605,16 @@
       color: var(--brand-magenta);
     }
 
+    .status-msg {
+      font-size: 0.75rem;
+      margin-top: 3px;
+      min-height: 1.1em;
+    }
+
     .flow-msg {
       margin-top: 4px;
       min-height: 1.2em;
+      font-size: 0.78rem;
     }
 
     .btn-row {
@@ -572,21 +764,21 @@
     }
 
     .btn-flow-action,
-    .btn-flow-ok,
     .btn-flow-noresp,
     .btn-flow-action-short {
       border: none !important;
     }
 
-    .card.idle {}
+    /* CORES MAIS EVIDENTES POR ESTADO */
 
     body.theme-dark .card.ok {
-      background: radial-gradient(circle at top left, rgba(224, 0, 122, 0.2), var(--brand-card-dark));
+      background: radial-gradient(circle at top left, rgba(34, 197, 94, 0.35), #022c22);
+      border-color: #16a34a;
     }
 
     body.theme-light .card.ok {
-      background: #ecfdf5;
-      border-color: #6ee7b7;
+      background: #dcfce7;
+      border-color: #22c55e;
     }
 
     body.theme-dark .card.warn {
@@ -595,7 +787,7 @@
     }
 
     body.theme-light .card.warn {
-      background: #fffbeb;
+      background: #fef3c7;
       border-color: #f59e0b;
     }
 
@@ -605,8 +797,8 @@
     }
 
     body.theme-light .card.danger {
-      background: #fef2f2;
-      border-color: #f97373;
+      background: #fee2e2;
+      border-color: #ef4444;
     }
 
     body.theme-dark .card.expired {
@@ -615,8 +807,8 @@
     }
 
     body.theme-light .card.expired {
-      background: #fee2e2;
-      box-shadow: 0 0 0 2px #f97373;
+      background: #fecaca;
+      box-shadow: 0 0 0 2px #ef4444;
     }
 
     .card.alarming {
@@ -627,9 +819,26 @@
       animation: blink 0.6s steps(1) infinite;
     }
 
+    .blink-time {
+      animation: blink 0.6s steps(1) infinite;
+    }
+
     @keyframes blink {
       50% {
         opacity: 0.35;
+      }
+    }
+
+    .card.start-anim {
+      animation: flashStart 0.15s ease-out;
+    }
+
+    @keyframes flashStart {
+      0% {
+        box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.8);
+      }
+      100% {
+        box-shadow: none;
       }
     }
 
@@ -730,7 +939,7 @@
 
     body.theme-light .help-close {
       background: #111827;
-      color: #f9fafb;
+      color: #f9f9fb;
     }
 
     .flow-btn-small {
@@ -750,6 +959,11 @@
     body.theme-light .flow-btn-small {
       background: #111827;
       color: #f9f9fb;
+    }
+
+    .section-divider {
+      border-top: 1px solid rgba(148, 163, 184, 0.4);
+      margin: 6px 0;
     }
   </style>
 </head>
@@ -778,239 +992,265 @@
     <button class="test-btn" id="test-alarm">Testar alarme</button>
     <button class="mute-all-btn" id="mute-all-btn">Silenciar todos</button>
     <button class="theme-btn" id="theme-toggle">Modo claro</button>
+    <button class="layout-btn" id="layout-toggle">Layout vertical</button>
     <button class="help-btn" id="help-btn">Ajuda geral</button>
   </div>
 
-  <div class="grid">
-    <!-- CARD 1 -->
-    <div class="card idle" data-id="1" draggable="true">
-      <div class="card-title">
-        <div class="card-title-left">
-          <span class="status-dot"></span>
-          <span>Chat 1</span>
-        </div>
-        <div class="card-title-right">
-          <span class="sound-badge"></span>
-          <span class="drag-hint">Arraste para mover</span>
-        </div>
-      </div>
-
-      <div class="label-row">
-        <span>Identificação:</span>
-        <input class="label-input" placeholder="Identifique o cliente (nome ou assunto)">
-      </div>
-      <div class="time-input-row">
-        <span>Hora msg:</span>
-        <input class="time-input" placeholder="Campo opcional – use se quiser anotar um horário">
-        <button class="btn-paste-time">Colar</button>
-      </div>
-      <div class="time-toggle-row">
-        <label>
-          <input type="checkbox" class="time-toggle">
-          Usar horário do campo
-        </label>
-      </div>
-
-      <div class="time">00:00</div>
-      <div class="last-timer"></div>
-      <div class="history-msg"></div>
-      <div class="status-msg"></div>
-      <div class="flow-msg"></div>
-
-      <div class="btn-section-label">Timers manuais</div>
-      <div class="btn-row btn-row-timers">
-        <button class="btn-time btn-1" data-minutes="1">+1</button>
-        <button class="btn-time btn-2" data-minutes="2">+2</button>
-        <button class="btn-time btn-3" data-minutes="3">+3</button>
-        <button class="btn-time btn-5" data-minutes="5">+5</button>
-      </div>
-
-      <div class="btn-section-label">Fluxos de inatividade</div>
-      <div class="btn-row btn-row-flows">
-        <button class="btn-flow btn-flow-action" data-flow="action">Ação 5-3-2-1</button>
-        <button class="btn-flow btn-flow-action-short" data-flow="action_short">Ação 3-2-1</button>
-        <button class="btn-flow btn-flow-ok" data-flow="after_ok">Fech. OK (1)</button>
-        <button class="btn-flow btn-flow-noresp" data-flow="after_noresp">Fech. 2+1</button>
-      </div>
-
-      <div class="btn-row btn-row-controls">
-        <button class="btn-clear">Limpar campos</button>
-        <button class="btn-cancel">Cancelar</button>
-        <button class="btn-mute">Silenciar</button>
-      </div>
+  <div class="layout-container layout-horizontal" id="layout-container">
+    <div class="chat-nav">
+      <button class="chat-nav-btn nav-idle active" data-target="1">
+        <span class="chat-nav-name" title="Chat 1">Chat 1</span>
+        <span class="chat-nav-time">00:00</span>
+      </button>
+      <button class="chat-nav-btn nav-idle" data-target="2">
+        <span class="chat-nav-name" title="Chat 2">Chat 2</span>
+        <span class="chat-nav-time">00:00</span>
+      </button>
+      <button class="chat-nav-btn nav-idle" data-target="3">
+        <span class="chat-nav-name" title="Chat 3">Chat 3</span>
+        <span class="chat-nav-time">00:00</span>
+      </button>
+      <button class="chat-nav-btn nav-idle" data-target="4">
+        <span class="chat-nav-name" title="Chat 4">Chat 4</span>
+        <span class="chat-nav-time">00:00</span>
+      </button>
     </div>
 
-    <!-- CARD 2 -->
-    <div class="card idle" data-id="2" draggable="true">
-      <div class="card-title">
-        <div class="card-title-left">
-          <span class="status-dot"></span>
-          <span>Chat 2</span>
+    <div class="grid">
+      <!-- CARD 1 -->
+      <div class="card idle" data-id="1" draggable="true">
+        <div class="card-title">
+          <div class="card-title-left">
+            <span class="status-dot"></span>
+            <span>Chat 1</span>
+          </div>
+          <div class="card-title-right">
+            <span class="sound-badge" title=""></span>
+            <span class="drag-hint">Arraste para mover</span>
+          </div>
         </div>
-        <div class="card-title-right">
-          <span class="sound-badge"></span>
-          <span class="drag-hint">Arraste para mover</span>
+
+        <div class="label-row">
+          <span>Identificação:</span>
+          <input class="label-input" placeholder="Identifique o cliente (nome ou assunto)">
         </div>
-      </div>
-
-      <div class="label-row">
-        <span>Identificação:</span>
-        <input class="label-input" placeholder="Identifique o cliente (nome ou assunto)">
-      </div>
-      <div class="time-input-row">
-        <span>Hora msg:</span>
-        <input class="time-input" placeholder="Campo opcional – use se quiser anotar um horário">
-        <button class="btn-paste-time">Colar</button>
-      </div>
-      <div class="time-toggle-row">
-        <label>
-          <input type="checkbox" class="time-toggle">
-          Usar horário do campo
-        </label>
-      </div>
-
-      <div class="time">00:00</div>
-      <div class="last-timer"></div>
-      <div class="history-msg"></div>
-      <div class="status-msg"></div>
-      <div class="flow-msg"></div>
-
-      <div class="btn-section-label">Timers manuais</div>
-      <div class="btn-row btn-row-timers">
-        <button class="btn-time btn-1" data-minutes="1">+1</button>
-        <button class="btn-time btn-2" data-minutes="2">+2</button>
-        <button class="btn-time btn-3" data-minutes="3">+3</button>
-        <button class="btn-time btn-5" data-minutes="5">+5</button>
-      </div>
-
-      <div class="btn-section-label">Fluxos de inatividade</div>
-      <div class="btn-row btn-row-flows">
-        <button class="btn-flow btn-flow-action" data-flow="action">Ação 5-3-2-1</button>
-        <button class="btn-flow btn-flow-action-short" data-flow="action_short">Ação 3-2-1</button>
-        <button class="btn-flow btn-flow-ok" data-flow="after_ok">Fech. OK (1)</button>
-        <button class="btn-flow btn-flow-noresp" data-flow="after_noresp">Fech. 2+1</button>
-      </div>
-
-      <div class="btn-row btn-row-controls">
-        <button class="btn-clear">Limpar campos</button>
-        <button class="btn-cancel">Cancelar</button>
-        <button class="btn-mute">Silenciar</button>
-      </div>
-    </div>
-
-    <!-- CARD 3 -->
-    <div class="card idle" data-id="3" draggable="true">
-      <div class="card-title">
-        <div class="card-title-left">
-          <span class="status-dot"></span>
-          <span>Chat 3</span>
+        <div class="time-input-row">
+          <span>Hora msg:</span>
+          <input class="time-input" placeholder="Opcional – hora da msg, se quiser">
+          <button class="btn-paste-time" title="Colar horário do clipboard">Colar</button>
         </div>
-        <div class="card-title-right">
-          <span class="sound-badge"></span>
-          <span class="drag-hint">Arraste para mover</span>
+        <div class="time-toggle-row">
+          <label>
+            <input type="checkbox" class="time-toggle">
+            Usar horário do campo
+          </label>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <div class="time">00:00</div>
+        <div class="status-msg">Nenhum timer ativo</div>
+        <div class="last-timer"></div>
+        <div class="history-msg"></div>
+        <div class="flow-msg"></div>
+
+        <div class="btn-section-label">Timers manuais</div>
+        <div class="btn-row btn-row-timers">
+          <button class="btn-time btn-1" data-minutes="1" title="Inicia hold de 1 minuto">⏱ Hold 1m</button>
+          <button class="btn-time btn-2" data-minutes="2" title="Inicia hold de 2 minutos">⏱ Hold 2m</button>
+          <button class="btn-time btn-3" data-minutes="3" title="Inicia hold de 3 minutos">⏱ Hold 3m</button>
+          <button class="btn-time btn-5" data-minutes="5" title="Inicia hold de 5 minutos">⏱ Hold 5m</button>
+        </div>
+
+        <div class="btn-section-label">Fluxos de inatividade</div>
+        <div class="btn-row btn-row-flows">
+          <button class="btn-flow btn-flow-action" data-flow="action" title="Fluxo para cliente ativo: 5m → 2m → 1m">🔁 Fluxo 5-2-1</button>
+          <button class="btn-flow btn-flow-action-short" data-flow="action_short" title="Fluxo para cliente ativo curto: 3m → 2m → 1m">🔁 Fluxo 3-2-1</button>
+          <button class="btn-flow btn-flow-noresp" data-flow="after_noresp" title="Fechamento para cliente sem resposta: 2m + 1m">🚪 Fechar 2+1m</button>
+        </div>
+
+        <div class="btn-row btn-row-controls">
+          <button class="btn-clear" title="Limpa identificação e hora, mantendo histórico">🧹 Limpar</button>
+          <button class="btn-cancel" title="Cancela o timer atual, mantendo histórico">✖ Cancelar</button>
+          <button class="btn-mute" title="Silencia o alarme deste chat">🔇 Silenciar</button>
         </div>
       </div>
 
-      <div class="label-row">
-        <span>Identificação:</span>
-        <input class="label-input" placeholder="Identifique o cliente (nome ou assunto)">
-      </div>
-      <div class="time-input-row">
-        <span>Hora msg:</span>
-        <input class="time-input" placeholder="Campo opcional – use se quiser anotar um horário">
-        <button class="btn-paste-time">Colar</button>
-      </div>
-      <div class="time-toggle-row">
-        <label>
-          <input type="checkbox" class="time-toggle">
-          Usar horário do campo
-        </label>
-      </div>
-
-      <div class="time">00:00</div>
-      <div class="last-timer"></div>
-      <div class="history-msg"></div>
-      <div class="status-msg"></div>
-      <div class="flow-msg"></div>
-
-      <div class="btn-section-label">Timers manuais</div>
-      <div class="btn-row btn-row-timers">
-        <button class="btn-time btn-1" data-minutes="1">+1</button>
-        <button class="btn-time btn-2" data-minutes="2">+2</button>
-        <button class="btn-time btn-3" data-minutes="3">+3</button>
-        <button class="btn-time btn-5" data-minutes="5">+5</button>
-      </div>
-
-      <div class="btn-section-label">Fluxos de inatividade</div>
-      <div class="btn-row btn-row-flows">
-        <button class="btn-flow btn-flow-action" data-flow="action">Ação 5-3-2-1</button>
-        <button class="btn-flow btn-flow-action-short" data-flow="action_short">Ação 3-2-1</button>
-        <button class="btn-flow btn-flow-ok" data-flow="after_ok">Fech. OK (1)</button>
-        <button class="btn-flow btn-flow-noresp" data-flow="after_noresp">Fech. 2+1</button>
-      </div>
-
-      <div class="btn-row btn-row-controls">
-        <button class="btn-clear">Limpar campos</button>
-        <button class="btn-cancel">Cancelar</button>
-        <button class="btn-mute">Silenciar</button>
-      </div>
-    </div>
-
-    <!-- CARD 4 -->
-    <div class="card idle" data-id="4" draggable="true">
-      <div class="card-title">
-        <div class="card-title-left">
-          <span class="status-dot"></span>
-          <span>Chat 4</span>
+      <!-- CARD 2 -->
+      <div class="card idle" data-id="2" draggable="true">
+        <div class="card-title">
+          <div class="card-title-left">
+            <span class="status-dot"></span>
+            <span>Chat 2</span>
+          </div>
+          <div class="card-title-right">
+            <span class="sound-badge" title=""></span>
+            <span class="drag-hint">Arraste para mover</span>
+          </div>
         </div>
-        <div class="card-title-right">
-          <span class="sound-badge"></span>
-          <span class="drag-hint">Arraste para mover</span>
+
+        <div class="label-row">
+          <span>Identificação:</span>
+          <input class="label-input" placeholder="Identifique o cliente (nome ou assunto)">
+        </div>
+        <div class="time-input-row">
+          <span>Hora msg:</span>
+          <input class="time-input" placeholder="Opcional – hora da msg, se quiser">
+          <button class="btn-paste-time" title="Colar horário do clipboard">Colar</button>
+        </div>
+        <div class="time-toggle-row">
+          <label>
+            <input type="checkbox" class="time-toggle">
+            Usar horário do campo
+          </label>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <div class="time">00:00</div>
+        <div class="status-msg">Nenhum timer ativo</div>
+        <div class="last-timer"></div>
+        <div class="history-msg"></div>
+        <div class="flow-msg"></div>
+
+        <div class="btn-section-label">Timers manuais</div>
+        <div class="btn-row btn-row-timers">
+          <button class="btn-time btn-1" data-minutes="1" title="Inicia hold de 1 minuto">⏱ Hold 1m</button>
+          <button class="btn-time btn-2" data-minutes="2" title="Inicia hold de 2 minutos">⏱ Hold 2m</button>
+          <button class="btn-time btn-3" data-minutes="3" title="Inicia hold de 3 minutos">⏱ Hold 3m</button>
+          <button class="btn-time btn-5" data-minutes="5" title="Inicia hold de 5 minutos">⏱ Hold 5m</button>
+        </div>
+
+        <div class="btn-section-label">Fluxos de inatividade</div>
+        <div class="btn-row btn-row-flows">
+          <button class="btn-flow btn-flow-action" data-flow="action" title="Fluxo para cliente ativo: 5m → 2m → 1m">🔁 Fluxo 5-2-1</button>
+          <button class="btn-flow btn-flow-action-short" data-flow="action_short" title="Fluxo para cliente ativo curto: 3m → 2m → 1m">🔁 Fluxo 3-2-1</button>
+          <button class="btn-flow btn-flow-noresp" data-flow="after_noresp" title="Fechamento para cliente sem resposta: 2m + 1m">🚪 Fechar 2+1m</button>
+        </div>
+
+        <div class="btn-row btn-row-controls">
+          <button class="btn-clear" title="Limpa identificação e hora, mantendo histórico">🧹 Limpar</button>
+          <button class="btn-cancel" title="Cancela o timer atual, mantendo histórico">✖ Cancelar</button>
+          <button class="btn-mute" title="Silencia o alarme deste chat">🔇 Silenciar</button>
         </div>
       </div>
 
-      <div class="label-row">
-        <span>Identificação:</span>
-        <input class="label-input" placeholder="Identifique o cliente (nome ou assunto)">
-      </div>
-      <div class="time-input-row">
-        <span>Hora msg:</span>
-        <input class="time-input" placeholder="Campo opcional – use se quiser anotar um horário">
-        <button class="btn-paste-time">Colar</button>
-      </div>
-      <div class="time-toggle-row">
-        <label>
-          <input type="checkbox" class="time-toggle">
-          Usar horário do campo
-        </label>
+      <!-- CARD 3 -->
+      <div class="card idle" data-id="3" draggable="true">
+        <div class="card-title">
+          <div class="card-title-left">
+            <span class="status-dot"></span>
+            <span>Chat 3</span>
+          </div>
+          <div class="card-title-right">
+            <span class="sound-badge" title=""></span>
+            <span class="drag-hint">Arraste para mover</span>
+          </div>
+        </div>
+
+        <div class="label-row">
+          <span>Identificação:</span>
+          <input class="label-input" placeholder="Identifique o cliente (nome ou assunto)">
+        </div>
+        <div class="time-input-row">
+          <span>Hora msg:</span>
+          <input class="time-input" placeholder="Opcional – hora da msg, se quiser">
+          <button class="btn-paste-time" title="Colar horário do clipboard">Colar</button>
+        </div>
+        <div class="time-toggle-row">
+          <label>
+            <input type="checkbox" class="time-toggle">
+            Usar horário do campo
+          </label>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <div class="time">00:00</div>
+        <div class="status-msg">Nenhum timer ativo</div>
+        <div class="last-timer"></div>
+        <div class="history-msg"></div>
+        <div class="flow-msg"></div>
+
+        <div class="btn-section-label">Timers manuais</div>
+        <div class="btn-row btn-row-timers">
+          <button class="btn-time btn-1" data-minutes="1" title="Inicia hold de 1 minuto">⏱ Hold 1m</button>
+          <button class="btn-time btn-2" data-minutes="2" title="Inicia hold de 2 minutos">⏱ Hold 2m</button>
+          <button class="btn-time btn-3" data-minutes="3" title="Inicia hold de 3 minutos">⏱ Hold 3m</button>
+          <button class="btn-time btn-5" data-minutes="5" title="Inicia hold de 5 minutos">⏱ Hold 5m</button>
+        </div>
+
+        <div class="btn-section-label">Fluxos de inatividade</div>
+        <div class="btn-row btn-row-flows">
+          <button class="btn-flow btn-flow-action" data-flow="action" title="Fluxo para cliente ativo: 5m → 2m → 1m">🔁 Fluxo 5-2-1</button>
+          <button class="btn-flow btn-flow-action-short" data-flow="action_short" title="Fluxo para cliente ativo curto: 3m → 2m → 1m">🔁 Fluxo 3-2-1</button>
+          <button class="btn-flow btn-flow-noresp" data-flow="after_noresp" title="Fechamento para cliente sem resposta: 2m + 1m">🚪 Fechar 2+1m</button>
+        </div>
+
+        <div class="btn-row btn-row-controls">
+          <button class="btn-clear" title="Limpa identificação e hora, mantendo histórico">🧹 Limpar</button>
+          <button class="btn-cancel" title="Cancela o timer atual, mantendo histórico">✖ Cancelar</button>
+          <button class="btn-mute" title="Silencia o alarme deste chat">🔇 Silenciar</button>
+        </div>
       </div>
 
-      <div class="time">00:00</div>
-      <div class="last-timer"></div>
-      <div class="history-msg"></div>
-      <div class="status-msg"></div>
-      <div class="flow-msg"></div>
+      <!-- CARD 4 -->
+      <div class="card idle" data-id="4" draggable="true">
+        <div class="card-title">
+          <div class="card-title-left">
+            <span class="status-dot"></span>
+            <span>Chat 4</span>
+          </div>
+          <div class="card-title-right">
+            <span class="sound-badge" title=""></span>
+            <span class="drag-hint">Arraste para mover</span>
+          </div>
+        </div>
 
-      <div class="btn-section-label">Timers manuais</div>
-      <div class="btn-row btn-row-timers">
-        <button class="btn-time btn-1" data-minutes="1">+1</button>
-        <button class="btn-time btn-2" data-minutes="2">+2</button>
-        <button class="btn-time btn-3" data-minutes="3">+3</button>
-        <button class="btn-time btn-5" data-minutes="5">+5</button>
-      </div>
+        <div class="label-row">
+          <span>Identificação:</span>
+          <input class="label-input" placeholder="Identifique o cliente (nome ou assunto)">
+        </div>
+        <div class="time-input-row">
+          <span>Hora msg:</span>
+          <input class="time-input" placeholder="Opcional – hora da msg, se quiser">
+          <button class="btn-paste-time" title="Colar horário do clipboard">Colar</button>
+        </div>
+        <div class="time-toggle-row">
+          <label>
+            <input type="checkbox" class="time-toggle">
+            Usar horário do campo
+          </label>
+        </div>
 
-      <div class="btn-section-label">Fluxos de inatividade</div>
-      <div class="btn-row btn-row-flows">
-        <button class="btn-flow btn-flow-action" data-flow="action">Ação 5-3-2-1</button>
-        <button class="btn-flow btn-flow-action-short" data-flow="action_short">Ação 3-2-1</button>
-        <button class="btn-flow btn-flow-ok" data-flow="after_ok">Fech. OK (1)</button>
-        <button class="btn-flow btn-flow-noresp" data-flow="after_noresp">Fech. 2+1</button>
-      </div>
+        <div class="section-divider"></div>
 
-      <div class="btn-row btn-row-controls">
-        <button class="btn-clear">Limpar campos</button>
-        <button class="btn-cancel">Cancelar</button>
-        <button class="btn-mute">Silenciar</button>
+        <div class="time">00:00</div>
+        <div class="status-msg">Nenhum timer ativo</div>
+        <div class="last-timer"></div>
+        <div class="history-msg"></div>
+        <div class="flow-msg"></div>
+
+        <div class="btn-section-label">Timers manuais</div>
+        <div class="btn-row btn-row-timers">
+          <button class="btn-time btn-1" data-minutes="1" title="Inicia hold de 1 minuto">⏱ Hold 1m</button>
+          <button class="btn-time btn-2" data-minutes="2" title="Inicia hold de 2 minutos">⏱ Hold 2m</button>
+          <button class="btn-time btn-3" data-minutes="3" title="Inicia hold de 3 minutos">⏱ Hold 3m</button>
+          <button class="btn-time btn-5" data-minutes="5" title="Inicia hold de 5 minutos">⏱ Hold 5m</button>
+        </div>
+
+        <div class="btn-section-label">Fluxos de inatividade</div>
+        <div class="btn-row btn-row-flows">
+          <button class="btn-flow btn-flow-action" data-flow="action" title="Fluxo para cliente ativo: 5m → 2m → 1m">🔁 Fluxo 5-2-1</button>
+          <button class="btn-flow btn-flow-action-short" data-flow="action_short" title="Fluxo para cliente ativo curto: 3m → 2m → 1m">🔁 Fluxo 3-2-1</button>
+          <button class="btn-flow btn-flow-noresp" data-flow="after_noresp" title="Fechamento para cliente sem resposta: 2m + 1m">🚪 Fechar 2+1m</button>
+        </div>
+
+        <div class="btn-row btn-row-controls">
+          <button class="btn-clear" title="Limpa identificação e hora, mantendo histórico">🧹 Limpar</button>
+          <button class="btn-cancel" title="Cancela o timer atual, mantendo histórico">✖ Cancelar</button>
+          <button class="btn-mute" title="Silencia o alarme deste chat">🔇 Silenciar</button>
+        </div>
       </div>
     </div>
   </div>
@@ -1022,18 +1262,19 @@
       <div class="help-title">Ajuda geral</div>
       <ul class="help-list">
         <li>Cada card representa um chat independente.</li>
-        <li>Em <b>Identificação</b>, coloque o nome do cliente ou o assunto (ex.: JOÃO / SAQUE PIX).</li>
+        <li>Em <b>Identificação</b>, coloque o nome do cliente ou o assunto (ex.: JOÃO / SAQUE PIX). Esse nome também aparece no atalho lateral, com a cor do estado do timer.</li>
         <li>O campo <b>Hora msg</b> é opcional. Se você ativar “Usar horário do campo”, o timer começará a contar a partir do horário digitado. Se estiver desligado, o timer começa imediatamente.</li>
-        <li>Os botões <b>+1, +2, +3, +5</b> iniciam timers manuais para segurar o chat em hold.</li>
-        <li>Quando o tempo zera, o card fica vermelho e o alarme toca continuamente até você clicar em <b>Silenciar</b> ou <b>Silenciar todos</b>.</li>
-        <li>O botão <b>Limpar campos</b> apaga identificação e hora, mas não apaga o histórico de timers.</li>
+        <li>Os botões <b>Hold 1m, Hold 2m, Hold 3m, Hold 5m</b> iniciam timers manuais para segurar o chat em hold.</li>
+        <li>Quando o tempo zera, o card fica vermelho, o número do tempo passa a piscar e o alarme toca continuamente até você clicar em <b>Silenciar</b> ou <b>Silenciar todos</b>. O tempo do atalho lateral também pisca.</li>
+        <li>O botão <b>Limpar</b> apaga identificação e hora, mas não apaga o histórico de timers.</li>
         <li>O botão <b>Cancelar</b> encerra o timer atual e deixa o card em estado neutro (idle), mantendo o histórico.</li>
         <li>A barrinha colorida na lateral identifica cada chat e ajuda a diferenciar visualmente.</li>
         <li>Você pode arrastar qualquer card para reorganizar a ordem dos chats.</li>
-        <li>O volume, o tipo de som e o tema (claro/escuro) podem ser ajustados no topo da tela.</li>
+        <li>O volume, o tipo de som, o tema (claro/escuro) e o layout (lado a lado / vertical) podem ser ajustados no topo da tela.</li>
         <li>Ao colar um horário no campo “Hora msg”, você pode usar o botão <b>Colar</b> ou simplesmente usar CTRL+V.</li>
         <li>As notificações do navegador, quando permitidas, mostram o nome do cliente que você colocou em <b>Identificação</b>, junto com o número do chat.</li>
-        <li>Os botões de <b>fluxo de inatividade</b> (Ação 5-3-2-1, Ação 3-2-1, Fech. OK, Fech. 2+1) apenas automatizam sequências de holds; você pode usá-los normalmente sem precisar decorar a lógica completa.</li>
+        <li>Os botões de <b>fluxo de inatividade</b> (Fluxo 5-2-1, Fluxo 3-2-1, Fechar 2+1m) apenas automatizam sequências de holds.</li>
+        <li>No layout vertical, use os botões à esquerda para ir direto ao chat desejado; eles mostram o nome do cliente e o tempo atual do timer. Quando um chat estoura, o botão correspondente pisca até você cancelar ou iniciar novo timer.</li>
       </ul>
       <button id="help-close" class="help-close">Fechar</button>
     </div>
@@ -1044,18 +1285,22 @@
     let audioCtx = null;
     let alarmVolume = 0.7;
     let soundType = 'triple';
-    let notificationsEnabled = false; // controle de notificação
+    let notificationsEnabled = false;
+    let activeChatId = '1';
 
     const volumeSlider = document.getElementById('volume');
     const volumeValue = document.getElementById('volume-value');
     const soundSelect = document.getElementById('sound-type');
     const testBtn = document.getElementById('test-alarm');
     const themeToggle = document.getElementById('theme-toggle');
+    const layoutToggle = document.getElementById('layout-toggle');
+    const layoutContainer = document.getElementById('layout-container');
     const clockEl = document.getElementById('clock');
     const helpBtn = document.getElementById('help-btn');
     const helpModal = document.getElementById('help-modal');
     const helpClose = document.getElementById('help-close');
     const muteAllBtn = document.getElementById('mute-all-btn');
+    const navButtons = document.querySelectorAll('.chat-nav-btn');
 
     // ====== NOTIFICAÇÕES DESKTOP ======
     if ('Notification' in window) {
@@ -1092,7 +1337,7 @@
       }
     }
 
-    // ====== RELÓGIO (HORÁRIO DO PC) ======
+    // ====== RELÓGIO ======
     function updateClock() {
       const now = new Date();
       const hh = String(now.getHours()).padStart(2, "0");
@@ -1118,7 +1363,7 @@
       }
     });
 
-    // ====== TEMA (DIA/NOITE) ======
+    // ====== THEME ======
     function applyTheme(theme) {
       document.body.classList.remove('theme-dark', 'theme-light');
       document.body.classList.add(theme === 'light' ? 'theme-light' : 'theme-dark');
@@ -1138,7 +1383,109 @@
       applyTheme(current === 'light' ? 'dark' : 'light');
     });
 
-    // ====== CONTROLES DE ÁUDIO ======
+    // ====== NAV HELPERS ======
+    function getNavButton(id) {
+      return document.querySelector(`.chat-nav-btn[data-target="${id}"]`);
+    }
+
+    function setNavBlink(id, on) {
+      const btn = getNavButton(id);
+      if (!btn) return;
+      if (on) {
+        btn.classList.add('nav-blink');
+      } else {
+        btn.classList.remove('nav-blink');
+      }
+    }
+
+    function syncNavWithCard(id) {
+      const card = document.querySelector(`.card[data-id="${id}"]`);
+      const btn = getNavButton(id);
+      if (!card || !btn) return;
+
+      const labelInput = card.querySelector('.label-input');
+      let label = (labelInput?.value || '').trim();
+      if (!label) label = `Chat ${id}`;
+
+      const nameSpan = btn.querySelector('.chat-nav-name');
+      const timeSpan = btn.querySelector('.chat-nav-time');
+
+      if (nameSpan) {
+        nameSpan.textContent = label;
+        nameSpan.title = label;
+      }
+
+      const timeEl = card.querySelector('.time');
+      const tText = timeEl ? timeEl.textContent : '00:00';
+      if (timeSpan) {
+        timeSpan.textContent = tText;
+      }
+
+      btn.classList.remove('nav-idle','nav-ok','nav-warn','nav-danger','nav-expired');
+
+      if (card.classList.contains('expired')) {
+        btn.classList.add('nav-expired');
+        if (timeSpan) timeSpan.classList.add('blink-time');
+      } else if (card.classList.contains('danger')) {
+        btn.classList.add('nav-danger');
+        if (timeSpan) timeSpan.classList.remove('blink-time');
+      } else if (card.classList.contains('warn')) {
+        btn.classList.add('nav-warn');
+        if (timeSpan) timeSpan.classList.remove('blink-time');
+      } else if (card.classList.contains('ok')) {
+        btn.classList.add('nav-ok');
+        if (timeSpan) timeSpan.classList.remove('blink-time');
+      } else {
+        btn.classList.add('nav-idle');
+        if (timeSpan) timeSpan.classList.remove('blink-time');
+      }
+    }
+
+    // ====== LAYOUT (HORIZONTAL / VERTICAL) ======
+    function setActiveCard(id, scrollIntoView = false) {
+      activeChatId = String(id);
+      navButtons.forEach(btn => {
+        if (btn.dataset.target === String(id)) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+      if (scrollIntoView) {
+        const card = document.querySelector(`.card[data-id="${id}"]`);
+        if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+
+    function applyLayout(mode) {
+      layoutContainer.classList.remove('layout-horizontal', 'layout-vertical');
+      if (mode === 'vertical') {
+        layoutContainer.classList.add('layout-vertical');
+        layoutToggle.textContent = 'Layout lado a lado';
+        setActiveCard(activeChatId || '1', false);
+      } else {
+        layoutContainer.classList.add('layout-horizontal');
+        layoutToggle.textContent = 'Layout vertical';
+      }
+      localStorage.setItem('timer_sla_layout', mode);
+    }
+
+    const savedLayout = localStorage.getItem('timer_sla_layout') || 'horizontal';
+    applyLayout(savedLayout);
+
+    layoutToggle.addEventListener('click', () => {
+      const current = layoutContainer.classList.contains('layout-vertical') ? 'vertical' : 'horizontal';
+      applyLayout(current === 'vertical' ? 'horizontal' : 'vertical');
+    });
+
+    navButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.target;
+        setActiveCard(id, true);
+      });
+    });
+
+    // ====== ÁUDIO ======
     volumeSlider.addEventListener('input', () => {
       alarmVolume = Number(volumeSlider.value) / 100;
       volumeValue.textContent = volumeSlider.value + '%';
@@ -1183,7 +1530,6 @@
 
     testBtn.addEventListener('click', () => {
       playAlarmPattern();
-      // reforça pedido de permissão de notificação após interação
       if ('Notification' in window && Notification.permission === 'default') {
         Notification.requestPermission().then((perm) => {
           notificationsEnabled = perm === 'granted';
@@ -1191,7 +1537,7 @@
       }
     });
 
-    // ====== UTILITÁRIOS DE TEMPO (AM/PM) ======
+    // ====== TEMPO ======
     function formatTime(ms) {
       if (ms < 0) ms = 0;
       const totalSec = Math.floor(ms / 1000);
@@ -1239,9 +1585,13 @@
     }
 
     function clearCardState(card) {
-      card.classList.remove("ok", "warn", "danger", "expired", "blink", "alarming");
+      card.classList.remove("ok", "warn", "danger", "expired", "blink", "alarming", "start-anim");
       card.classList.add("idle");
-      card.querySelector(".time").textContent = "00:00";
+      const timeEl = card.querySelector(".time");
+      if (timeEl) {
+        timeEl.textContent = "00:00";
+        timeEl.classList.remove("blink-time");
+      }
       const statusEl = card.querySelector(".status-msg");
       if (statusEl) statusEl.textContent = "Nenhum timer ativo";
       const flowEl = card.querySelector(".flow-msg");
@@ -1250,7 +1600,14 @@
       if (soundBadge) {
         soundBadge.textContent = "";
         soundBadge.classList.remove("sound-on", "sound-off");
+        soundBadge.removeAttribute("title");
       }
+      const lastEl = card.querySelector(".last-timer");
+      if (lastEl) lastEl.textContent = "";
+      const historyEl = card.querySelector(".history-msg");
+      if (historyEl) historyEl.textContent = "";
+
+      syncNavWithCard(card.dataset.id);
     }
 
     function stopAlarm(id) {
@@ -1267,12 +1624,14 @@
         const soundBadge = card.querySelector(".sound-badge");
         if (soundBadge) {
           if (card.classList.contains("expired")) {
-            soundBadge.textContent = "🔇 Silenciado";
+            soundBadge.textContent = "🔇 Som off";
             soundBadge.classList.add("sound-off");
             soundBadge.classList.remove("sound-on");
+            soundBadge.title = "Alarme silenciado para este chat";
           } else {
             soundBadge.textContent = "";
             soundBadge.classList.remove("sound-on", "sound-off");
+            soundBadge.removeAttribute("title");
           }
         }
       }
@@ -1291,6 +1650,7 @@
           soundBadge.textContent = "🔊 Som ativo";
           soundBadge.classList.add("sound-on");
           soundBadge.classList.remove("sound-off");
+          soundBadge.title = "Alarme ativo para este chat";
         }
       }
 
@@ -1325,7 +1685,7 @@
         return;
       }
       const baseText = baseLabel || "a partir de agora";
-      lastEl.textContent = `Último timer: +${minutes} min (${baseText})`;
+      lastEl.textContent = `⏱ +${minutes} min (${baseText})`;
     }
 
     function highlightLastButton(card, lastMinutes) {
@@ -1365,6 +1725,8 @@
       const prev = timers[id];
       const prevHistory = prev?.history || [];
 
+      setNavBlink(id, false);
+
       if (prev?.interval) {
         clearInterval(prev.interval);
       }
@@ -1373,6 +1735,11 @@
       }
 
       const timeInput = card.querySelector(".time-input");
+      const timeEl = card.querySelector(".time");
+      if (timeEl) {
+        timeEl.classList.remove("blink-time");
+      }
+
       const useFieldBase = options.useFieldBase === true;
 
       let baseTime = Date.now();
@@ -1412,11 +1779,14 @@
         currentMinutes: minutes
       };
 
-      card.classList.remove("idle", "warn", "danger", "expired", "blink", "alarming");
-      card.classList.add("ok");
+      card.classList.remove("idle", "warn", "danger", "expired", "blink", "alarming", "start-anim");
+      card.classList.add("ok", "start-anim");
+
+      setTimeout(() => card.classList.remove("start-anim"), 180);
 
       const status = card.querySelector(".status-msg");
-      status.textContent = "";
+      status.textContent = "Timer ativo";
+
       setFlowMessage(card, "");
       updateLastTimerDisplay(card, minutes, baseLabel);
       updateHistoryDisplay(card, trimmedHistory, minutes);
@@ -1426,38 +1796,47 @@
       if (soundBadge) {
         soundBadge.textContent = "";
         soundBadge.classList.remove("sound-on", "sound-off");
+        soundBadge.removeAttribute("title");
       }
+
+      syncNavWithCard(id);
 
       timers[id].interval = setInterval(() => {
         const t = timers[id];
         if (!t) return;
         const diff = t.endTime - Date.now();
-        const timeEl = card.querySelector(".time");
-        timeEl.textContent = formatTime(diff);
-
+        const timeElInner = card.querySelector(".time");
         const statusNow = card.querySelector(".status-msg");
-        card.classList.remove("ok", "warn", "danger", "expired", "blink", "alarming");
 
-        if (diff > 60_000) {
+        timeElInner.textContent = formatTime(diff);
+
+        card.classList.remove("ok", "warn", "danger", "expired", "blink", "alarming");
+        timeElInner.classList.remove("blink-time");
+
+        if (diff >= 60_000) {
           card.classList.add("ok");
-          statusNow.textContent = "";
+          statusNow.textContent = "Timer ativo";
         } else if (diff > 15_000) {
           card.classList.add("warn");
-          statusNow.textContent = "";
+          statusNow.textContent = "Menos de 1 minuto";
         } else if (diff > 0) {
           card.classList.add("danger", "blink");
-          statusNow.textContent = "";
+          statusNow.textContent = "Quase estourando";
         } else {
           card.classList.add("expired");
-          timeEl.textContent = "00:00";
-          statusNow.textContent = "TEMPO ESGOTADO – responda e depois silencie o alarme";
+          timeElInner.textContent = "00:00";
+          timeElInner.classList.add("blink-time");
+          statusNow.textContent = "Tempo esgotado – responda e depois silencie o alarme";
           if (!t.expiredNotified && !t.manualMuted) {
             t.expiredNotified = true;
             startAlarm(id);
             showExpireNotification(id);
+            setNavBlink(id, true);
           }
           handleFlowOnExpire(card, id);
         }
+
+        syncNavWithCard(id);
       }, 200);
     }
 
@@ -1486,13 +1865,14 @@
       updateLastTimerDisplay(card, null, null);
       updateHistoryDisplay(card, timers[id].history, null);
       highlightLastButton(card, null);
+      setNavBlink(id, false);
+      syncNavWithCard(id);
     }
 
-    // ====== FLUXOS DE INATIVIDADE ======
+    // ====== FLUXOS ======
     const FLOW_SEQUENCES = {
-      action: [5, 3, 2, 1],
+      action: [5, 2, 1],
       action_short: [3, 2, 1],
-      after_ok: [1],
       after_noresp: [2, 1]
     };
 
@@ -1525,7 +1905,7 @@
       const isActionFlow = flowType === 'action' || flowType === 'action_short';
 
       if (isActionFlow) {
-        const flowName = flowType === 'action' ? '5-3-2-1' : '3-2-1';
+        const flowName = flowType === 'action' ? '5-2-1' : '3-2-1';
         if (step < seq.length - 1) {
           if (!t.awaitingFlowConfirm) {
             t.awaitingFlowConfirm = true;
@@ -1533,13 +1913,13 @@
             const currentMin = seq[step];
             const nextMin = seq[nextStep];
             flowEl.innerHTML = `
-              Hold de ${currentMin} min terminou.<br>
-              Depois de responder o cliente para continuar o procedimento, clique abaixo:<br>
+              🔁 Fluxo ${flowName}: hold de ${currentMin} min terminou.<br>
+              Depois de responder o cliente, clique abaixo para continuar:<br>
               <button class="flow-btn-small" data-next-step="${nextStep}">Já respondi, iniciar ${nextMin} min</button>
             `;
           }
         } else {
-          flowEl.innerHTML = `Fluxo ${flowName} concluído. Se o cliente não respondeu, você pode encerrar o chat.`;
+          flowEl.innerHTML = `🔁 Fluxo ${flowName} concluído. Se o cliente não respondeu, você pode encerrar o chat.`;
           t.flowType = null;
           t.awaitingFlowConfirm = false;
         }
@@ -1548,20 +1928,16 @@
           if (!t.awaitingFlowConfirm) {
             t.awaitingFlowConfirm = true;
             flowEl.innerHTML = `
-              Hold de 2 min terminou.<br>
-              Depois de enviar "Posso ajudar em algo mais?" ao cliente, clique abaixo para iniciar 1 min:<br>
+              🔁 Fluxo 2 + 1: hold de 2 min terminou.<br>
+              Depois de enviar "Posso ajudar em algo mais?" ao cliente, clique abaixo:<br>
               <button class="flow-btn-small" data-next-step="1">Já enviei, iniciar 1 min</button>
             `;
           }
         } else {
-          flowEl.innerHTML = `Fluxo 2 + 1 concluído. Se o cliente não respondeu, você pode encerrar o chat.`;
+          flowEl.innerHTML = `🔁 Fluxo 2 + 1 concluído. Se o cliente não respondeu, você pode encerrar o chat.`;
           t.flowType = null;
           t.awaitingFlowConfirm = false;
         }
-      } else if (flowType === 'after_ok') {
-        flowEl.innerHTML = `Hold final de 1 minuto concluído. Se o cliente não pediu mais nada, você pode encerrar o chat.`;
-        t.flowType = null;
-        t.awaitingFlowConfirm = false;
       }
     }
 
@@ -1574,7 +1950,7 @@
       startFlowStep(card, flowType, step, {
         useFieldBase
       });
-      setFlowMessage(card, "Fluxo de inatividade iniciado. O próximo passo depende da sua interação com o cliente.");
+      setFlowMessage(card, "🔁 Fluxo de inatividade iniciado. O próximo passo depende da sua interação com o cliente.");
     }
 
     // ====== INICIALIZAÇÃO DOS CARDS ======
@@ -1593,6 +1969,10 @@
 
       labelInput.addEventListener("focus", (e) => e.target.select());
       timeInput.addEventListener("focus", (e) => e.target.select());
+
+      labelInput.addEventListener("input", () => {
+        syncNavWithCard(id);
+      });
 
       setTimeFieldEnabled(card, fieldToggle.checked);
       clearCardState(card);
@@ -1631,7 +2011,7 @@
           startFlowStep(card, t.flowType, nextStep, {
             useFieldBase: false
           });
-          setFlowMessage(card, "Próximo hold iniciado a partir da sua última resposta.");
+          setFlowMessage(card, "🔁 Próximo hold iniciado a partir da sua última resposta.");
         }
       });
 
@@ -1653,6 +2033,7 @@
         fieldToggle.checked = false;
         setTimeFieldEnabled(card, fieldToggle.checked);
         labelInput.focus();
+        syncNavWithCard(id);
       });
 
       btnPasteTime.addEventListener("click", async () => {
@@ -1675,23 +2056,28 @@
           alert("Não consegui ler o clipboard. Cole manualmente (Ctrl+V).");
         }
       });
+
+      // sync inicial da nav
+      syncNavWithCard(id);
     });
 
-    // ====== BOTÃO SILENCIAR TODOS ======
+    // ====== SILENCIAR TODOS ======
     muteAllBtn.addEventListener("click", () => {
       Object.keys(timers).forEach(id => {
         const card = document.querySelector(`.card[data-id="${id}"]`);
         stopAlarm(id);
         if (card && card.classList.contains("expired")) {
           const status = card.querySelector(".status-msg");
-          if (status && status.textContent.includes("TEMPO ESGOTADO")) {
+          if (status && status.textContent.includes("Tempo esgotado")) {
             status.textContent = "Tempo esgotado (alarme silenciado)";
           }
         }
+        setNavBlink(id, false);
+        syncNavWithCard(id);
       });
     });
 
-    // ====== DRAG & DROP PARA REORDENAR CARDS ======
+    // ====== DRAG & DROP ======
     const cards = document.querySelectorAll(".card");
 
     cards.forEach(card => {
