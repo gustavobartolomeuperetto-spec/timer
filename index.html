@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+
+<!DOCTYPE html> 
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
@@ -87,7 +88,8 @@
     .theme-btn,
     .help-btn,
     .mute-all-btn,
-    .layout-btn {
+    .layout-btn,
+    .clear-all-btn {
       padding: 4px 10px;
       border-radius: 999px;
       border: none;
@@ -148,6 +150,16 @@
       border: 1px solid #d1d5db;
     }
 
+    body.theme-dark .clear-all-btn {
+      background: #6b7280;
+      color: #f9fafb;
+    }
+
+    body.theme-light .clear-all-btn {
+      background: #d1d5db;
+      color: #111827;
+    }
+
     /* ====== LAYOUT / NAV ====== */
 
     .layout-container {
@@ -163,7 +175,6 @@
       min-width: 95px;
     }
 
-    /* Nav fixa e mais central na vertical no layout vertical */
     .layout-vertical .chat-nav {
       position: sticky;
       top: 50%;
@@ -194,13 +205,20 @@
       color: #e5e7eb;
     }
 
-    /* AQUI: modo claro bem visível */
     body.theme-light .chat-nav-btn {
       background: #ffffff;
       border-color: #d1d5db;
       color: #111827;
       box-shadow: 0 6px 14px rgba(148, 163, 184, 0.45);
       backdrop-filter: blur(4px);
+    }
+
+    .chat-nav-line {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      width: 100%;
+      justify-content: center;
     }
 
     .chat-nav-name {
@@ -229,9 +247,6 @@
       transform: translateY(-1px);
     }
 
-    /* Estados por botão (uma cor só) */
-
-    /* IDLE */
     body.theme-dark .chat-nav-btn.nav-idle {
       background: rgba(148, 163, 184, 0.25);
       color: #e5e7eb;
@@ -243,7 +258,6 @@
       border-color: #cbd5e1;
     }
 
-    /* OK */
     body.theme-dark .chat-nav-btn.nav-ok {
       background: rgba(34, 197, 94, 0.35);
       color: #bbf7d0;
@@ -255,19 +269,17 @@
       border-color: #22c55e;
     }
 
-    /* WARN */
     body.theme-dark .chat-nav-btn.nav-warn {
       background: rgba(245, 158, 11, 0.4);
       color: #fef3c7;
       border-color: #f59e0b;
     }
     body.theme-light .chat-nav-btn.nav-warn {
-      background: #fef3c7;
+      background: #fde68a;
       color: #92400e;
       border-color: #f59e0b;
     }
 
-    /* DANGER */
     body.theme-dark .chat-nav-btn.nav-danger {
       background: rgba(248, 113, 113, 0.5);
       color: #fee2e2;
@@ -279,7 +291,6 @@
       border-color: #f97373;
     }
 
-    /* EXPIRED */
     body.theme-dark .chat-nav-btn.nav-expired {
       background: rgba(185, 28, 28, 0.7);
       color: #fee2e2;
@@ -306,6 +317,8 @@
       grid-template-columns: 1fr;
       gap: 14px;
       flex: 1;
+      max-width: 1200px;
+      margin: 0 auto;
     }
 
     @media (min-width: 750px) {
@@ -314,7 +327,6 @@
       }
     }
 
-    /* Layout vertical: cards mais estreitos, centralizados e snap 1 por vez */
     .layout-vertical .grid {
       display: flex;
       flex-direction: column;
@@ -782,15 +794,13 @@
       border: none !important;
     }
 
-    /* CORES MAIS EVIDENTES POR ESTADO */
-
     body.theme-dark .card.ok {
       background: radial-gradient(circle at top left, rgba(34, 197, 94, 0.35), #022c22);
       border-color: #16a34a;
     }
 
     body.theme-light .card.ok {
-      background: #dcfce7;
+      background: #bbf7d0;
       border-color: #22c55e;
     }
 
@@ -800,7 +810,7 @@
     }
 
     body.theme-light .card.warn {
-      background: #fef3c7;
+      background: #fde68a;
       border-color: #f59e0b;
     }
 
@@ -810,7 +820,7 @@
     }
 
     body.theme-light .card.danger {
-      background: #fee2e2;
+      background: #fecaca;
       border-color: #ef4444;
     }
 
@@ -820,7 +830,7 @@
     }
 
     body.theme-light .card.expired {
-      background: #fecaca;
+      background: #fee2e2;
       box-shadow: 0 0 0 2px #ef4444;
     }
 
@@ -955,29 +965,178 @@
       color: #f9f9fb;
     }
 
-    .flow-btn-small {
-      margin-top: 4px;
-      padding: 3px 8px;
-      font-size: 0.7rem;
-      border-radius: 999px;
-      border: none;
-      cursor: pointer;
-    }
-
-    body.theme-dark .flow-btn-small {
-      background: #e5e7eb;
-      color: #111827;
-    }
-
-    body.theme-light .flow-btn-small {
-      background: #111827;
-      color: #f9f9fb;
-    }
-
     .section-divider {
       border-top: 1px solid rgba(148, 163, 184, 0.4);
       margin: 6px 0;
     }
+
+    /* Paginação ajuda geral */
+    .help-pagination {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 6px;
+      gap: 6px;
+    }
+
+    .help-page-indicator {
+      font-size: 0.75rem;
+      opacity: 0.85;
+    }
+
+    .help-page-btn {
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: none;
+      font-size: 0.75rem;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    body.theme-dark .help-page-btn {
+      background: #4b5563;
+      color: #e5e7eb;
+    }
+
+    body.theme-light .help-page-btn {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    .help-page-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    /* Prioridades - agora só aparecem quando definidas (sem espaço reservado) */
+    .priority-pill {
+      font-size: 0.7rem;
+      padding: 2px 6px;
+      border-radius: 999px;
+      border: 1px solid #6b7280;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      min-width: 32px;
+      text-align: center;
+      display: none; /* escondido por padrão, sem ocupar espaço */
+    }
+
+    .nav-priority {
+      font-size: 0.65rem;
+      padding: 2px 6px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      min-width: 30px;
+      text-align: center;
+      display: none; /* escondido por padrão, sem ocupar espaço */
+    }
+
+    body.theme-dark .priority-pill,
+    body.theme-dark .nav-priority {
+      background: #020617;
+      color: #e5e7eb;
+    }
+
+    body.theme-light .priority-pill,
+    body.theme-light .nav-priority {
+      background: #f9fafb;
+      color: #111827;
+    }
+
+    .priority-p1 {
+      background: #b91c1c !important;
+      color: #fee2e2 !important;
+      border-color: #b91c1c !important;
+      display: inline-block !important;
+    }
+
+    .priority-p2 {
+      background: #d97706 !important;
+      color: #fffbeb !important;
+      border-color: #d97706 !important;
+      display: inline-block !important;
+    }
+
+    .priority-p3 {
+      background: #1d4ed8 !important;
+      color: #dbeafe !important;
+      border-color: #1d4ed8 !important;
+      display: inline-block !important;
+    }
+
+    .priority-p4 {
+      background: #6b21a8 !important;
+      color: #f3e8ff !important;
+      border-color: #6b21a8 !important;
+      display: inline-block !important;
+    }
+
+    /* ====== MODO COMPACTO (densidade menor para caber em tela cheia) ====== */
+    body.density-compact .grid {
+      gap: 8px;
+    }
+
+    body.density-compact .card {
+      padding: 8px;
+    }
+
+    body.density-compact .card-title {
+      font-size: 0.85rem;
+    }
+
+    body.density-compact .drag-hint {
+      display: none;
+    }
+
+    body.density-compact .time {
+      font-size: 1.6rem;
+      margin-top: 2px;
+      margin-bottom: 2px;
+    }
+
+    body.density-compact .btn-section-label {
+      display: none;
+    }
+
+    body.density-compact .flow-msg,
+    body.density-compact .history-msg {
+      display: none;
+    }
+
+    body.density-compact .label-row span,
+    body.density-compact .time-input-row span {
+      display: none;
+    }
+
+    body.density-compact .label-input,
+    body.density-compact .time-input {
+      font-size: 0.75rem;
+      padding: 3px 5px;
+    }
+
+    body.density-compact .btn-row {
+      gap: 4px;
+    }
+
+    body.density-compact .btn-time,
+    body.density-compact .btn-flow,
+    body.density-compact .btn-cancel,
+    body.density-compact .btn-mute,
+    body.density-compact .btn-clear,
+    body.density-compact .btn-paste-time {
+      padding: 4px;
+      font-size: 0.75rem;
+    }
+
+    body.density-compact .sound-badge {
+      font-size: 0.7rem;
+    }
+
+    body.density-compact .status-msg,
+    body.density-compact .last-timer {
+      font-size: 0.7rem;
+    } 
   </style>
 </head>
 <body class="theme-dark">
@@ -988,8 +1147,8 @@
     <div class="top-group">
       <label>
         Volume:
-        <input id="volume" type="range" min="0" max="100" value="70">
-        <span id="volume-value">70%</span>
+        <input id="volume" type="range" min="0" max="100" value="20">
+        <span id="volume-value">20%</span>
       </label>
     </div>
     <div class="top-group">
@@ -1004,27 +1163,43 @@
     </div>
     <button class="test-btn" id="test-alarm">Testar alarme</button>
     <button class="mute-all-btn" id="mute-all-btn">Silenciar todos</button>
+    <button class="clear-all-btn" id="clear-all-btn">Limpar todos</button>
     <button class="theme-btn" id="theme-toggle">Modo claro</button>
     <button class="layout-btn" id="layout-toggle">Layout vertical</button>
+    <button class="layout-btn" id="density-toggle">Modo compacto</button>
     <button class="help-btn" id="help-btn">Ajuda geral</button>
+    <button class="help-btn" id="shortcut-help-btn">Atalhos</button>
+    <button class="help-btn" id="changelog-btn">Atualizações</button>
   </div>
 
   <div class="layout-container layout-horizontal" id="layout-container">
     <div class="chat-nav">
-      <button class="chat-nav-btn nav-idle active" data-target="1">
-        <span class="chat-nav-name" title="Chat 1">Chat 1</span>
+      <button class="chat-nav-btn nav-idle active" data-target="1" draggable="true">
+        <div class="chat-nav-line">
+          <span class="nav-priority"></span>
+          <span class="chat-nav-name" title="Chat 1">Chat 1</span>
+        </div>
         <span class="chat-nav-time">00:00</span>
       </button>
-      <button class="chat-nav-btn nav-idle" data-target="2">
-        <span class="chat-nav-name" title="Chat 2">Chat 2</span>
+      <button class="chat-nav-btn nav-idle" data-target="2" draggable="true">
+        <div class="chat-nav-line">
+          <span class="nav-priority"></span>
+          <span class="chat-nav-name" title="Chat 2">Chat 2</span>
+        </div>
         <span class="chat-nav-time">00:00</span>
       </button>
-      <button class="chat-nav-btn nav-idle" data-target="3">
-        <span class="chat-nav-name" title="Chat 3">Chat 3</span>
+      <button class="chat-nav-btn nav-idle" data-target="3" draggable="true">
+        <div class="chat-nav-line">
+          <span class="nav-priority"></span>
+          <span class="chat-nav-name" title="Chat 3">Chat 3</span>
+        </div>
         <span class="chat-nav-time">00:00</span>
       </button>
-      <button class="chat-nav-btn nav-idle" data-target="4">
-        <span class="chat-nav-name" title="Chat 4">Chat 4</span>
+      <button class="chat-nav-btn nav-idle" data-target="4" draggable="true">
+        <div class="chat-nav-line">
+          <span class="nav-priority"></span>
+          <span class="chat-nav-name" title="Chat 4">Chat 4</span>
+        </div>
         <span class="chat-nav-time">00:00</span>
       </button>
     </div>
@@ -1035,6 +1210,7 @@
         <div class="card-title">
           <div class="card-title-left">
             <span class="status-dot"></span>
+            <span class="priority-pill" data-priority="0" title="Definida apenas por atalho de teclado"></span>
             <span>Chat 1</span>
           </div>
           <div class="card-title-right">
@@ -1054,7 +1230,7 @@
         </div>
         <div class="time-toggle-row">
           <label>
-            <input type="checkbox" class="time-toggle">
+            <input type="checkbox" class="time-toggle" checked>
             Usar horário do campo
           </label>
         </div>
@@ -1084,8 +1260,8 @@
 
         <div class="btn-row btn-row-controls">
           <button class="btn-clear" title="Limpa identificação e hora, mantendo histórico">🧹 Limpar</button>
-          <button class="btn-cancel" title="Cancela o timer atual, mantendo histórico">✖ Cancelar</button>
-          <button class="btn-mute" title="Silencia o alarme deste chat">🔇 Silenciar</button>
+          <button class="btn-cancel" title="Para o timer atual, mantendo histórico">⏹ Parar</button>
+          <button class="btn-mute" title="Silencia ou reativa o alarme deste chat">🔇 Silenciar</button>
         </div>
       </div>
 
@@ -1094,6 +1270,7 @@
         <div class="card-title">
           <div class="card-title-left">
             <span class="status-dot"></span>
+            <span class="priority-pill" data-priority="0" title="Definida apenas por atalho de teclado"></span>
             <span>Chat 2</span>
           </div>
           <div class="card-title-right">
@@ -1113,7 +1290,7 @@
         </div>
         <div class="time-toggle-row">
           <label>
-            <input type="checkbox" class="time-toggle">
+            <input type="checkbox" class="time-toggle" checked>
             Usar horário do campo
           </label>
         </div>
@@ -1143,8 +1320,8 @@
 
         <div class="btn-row btn-row-controls">
           <button class="btn-clear" title="Limpa identificação e hora, mantendo histórico">🧹 Limpar</button>
-          <button class="btn-cancel" title="Cancela o timer atual, mantendo histórico">✖ Cancelar</button>
-          <button class="btn-mute" title="Silencia o alarme deste chat">🔇 Silenciar</button>
+          <button class="btn-cancel" title="Para o timer atual, mantendo histórico">⏹ Parar</button>
+          <button class="btn-mute" title="Silencia ou reativa o alarme deste chat">🔇 Silenciar</button>
         </div>
       </div>
 
@@ -1153,6 +1330,7 @@
         <div class="card-title">
           <div class="card-title-left">
             <span class="status-dot"></span>
+            <span class="priority-pill" data-priority="0" title="Definida apenas por atalho de teclado"></span>
             <span>Chat 3</span>
           </div>
           <div class="card-title-right">
@@ -1172,7 +1350,7 @@
         </div>
         <div class="time-toggle-row">
           <label>
-            <input type="checkbox" class="time-toggle">
+            <input type="checkbox" class="time-toggle" checked>
             Usar horário do campo
           </label>
         </div>
@@ -1202,8 +1380,8 @@
 
         <div class="btn-row btn-row-controls">
           <button class="btn-clear" title="Limpa identificação e hora, mantendo histórico">🧹 Limpar</button>
-          <button class="btn-cancel" title="Cancela o timer atual, mantendo histórico">✖ Cancelar</button>
-          <button class="btn-mute" title="Silencia o alarme deste chat">🔇 Silenciar</button>
+          <button class="btn-cancel" title="Para o timer atual, mantendo histórico">⏹ Parar</button>
+          <button class="btn-mute" title="Silencia ou reativa o alarme deste chat">🔇 Silenciar</button>
         </div>
       </div>
 
@@ -1212,6 +1390,7 @@
         <div class="card-title">
           <div class="card-title-left">
             <span class="status-dot"></span>
+            <span class="priority-pill" data-priority="0" title="Definida apenas por atalho de teclado"></span>
             <span>Chat 4</span>
           </div>
           <div class="card-title-right">
@@ -1231,7 +1410,7 @@
         </div>
         <div class="time-toggle-row">
           <label>
-            <input type="checkbox" class="time-toggle">
+            <input type="checkbox" class="time-toggle" checked>
             Usar horário do campo
           </label>
         </div>
@@ -1261,45 +1440,103 @@
 
         <div class="btn-row btn-row-controls">
           <button class="btn-clear" title="Limpa identificação e hora, mantendo histórico">🧹 Limpar</button>
-          <button class="btn-cancel" title="Cancela o timer atual, mantendo histórico">✖ Cancelar</button>
-          <button class="btn-mute" title="Silencia o alarme deste chat">🔇 Silenciar</button>
+          <button class="btn-cancel" title="Para o timer atual, mantendo histórico">⏹ Parar</button>
+          <button class="btn-mute" title="Silencia ou reativa o alarme deste chat">🔇 Silenciar</button>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="signature">By: Bartolomeu & GPT</div>
+  <div class="signature">By: Bartolomeu &amp; GPT</div>
 
+  <!-- Ajuda geral com páginas -->
   <div id="help-modal" class="help-modal">
     <div class="help-content">
       <div class="help-title">Ajuda geral</div>
-      <ul class="help-list">
-        <li>Cada card representa um chat independente.</li>
-        <li>Em <b>Identificação</b>, coloque o nome do cliente ou o assunto (ex.: JOÃO / SAQUE PIX). Esse nome também aparece no atalho lateral, com a cor do estado do timer.</li>
-        <li>O campo <b>Hora msg</b> é opcional. Se você ativar “Usar horário do campo”, o timer começará a contar a partir do horário digitado. Se estiver desligado, o timer começa imediatamente.</li>
-        <li>Os botões <b>Hold 1m, Hold 2m, Hold 3m, Hold 5m</b> iniciam timers manuais para segurar o chat em hold.</li>
-        <li>Quando o tempo zera, o card fica vermelho, o número do tempo passa a piscar e o alarme toca continuamente até você clicar em <b>Silenciar</b> ou <b>Silenciar todos</b>. O tempo do atalho lateral também pisca.</li>
-        <li>O botão <b>Limpar</b> apaga identificação e hora, mas não apaga o histórico de timers.</li>
-        <li>O botão <b>Cancelar</b> encerra o timer atual e deixa o card em estado neutro (idle), mantendo o histórico.</li>
-        <li>A barrinha colorida na lateral identifica cada chat e ajuda a diferenciar visualmente.</li>
-        <li>Você pode arrastar qualquer card para reorganizar a ordem dos chats.</li>
-        <li>O volume, o tipo de som, o tema (claro/escuro) e o layout (lado a lado / vertical) podem ser ajustados no topo da tela.</li>
-        <li>Ao colar um horário no campo “Hora msg”, você pode usar o botão <b>Colar</b> ou simplesmente usar CTRL+V.</li>
-        <li>As notificações do navegador, quando permitidas, mostram o nome do cliente que você colocou em <b>Identificação</b>, junto com o número do chat.</li>
-        <li>Os botões de <b>fluxo de inatividade</b> (Fluxo 5-2-1, Fluxo 3-2-1, Fechar 2+1m) apenas automatizam sequências de holds.</li>
-        <li>No layout vertical, use os botões à esquerda para ir direto ao chat desejado; eles mostram o nome do cliente e o tempo atual do timer. Quando um chat estoura, o botão correspondente pisca até você cancelar ou iniciar novo timer.</li>
-      </ul>
+      <div id="help-page-1" class="help-page">
+        <ul class="help-list">
+          <li>Cada card representa um chat independente.</li>
+          <li>Em <b>Identificação</b>, coloque o nome do cliente ou o assunto (ex.: JOÃO / SAQUE PIX). Esse nome também aparece no atalho lateral, com a cor do estado do timer.</li>
+          <li>O campo <b>Hora msg</b> é opcional. Se você ativar “Usar horário do campo”, o timer começará a contar a partir do horário digitado. Se estiver desligado, o timer começa imediatamente.</li>
+          <li>Os botões <b>Hold 1m, Hold 2m, Hold 3m, Hold 5m</b> iniciam timers manuais para segurar o chat em hold.</li>
+          <li>Quando o tempo zera, o card fica vermelho, o número do tempo passa a piscar e o alarme toca continuamente até você clicar em <b>Silenciar</b> ou <b>Silenciar todos</b>. O tempo do atalho lateral também pisca.</li>
+          <li>Se você silenciar o alarme de um chat que já estourou, o sistema faz um novo aviso sonoro quando o tempo chegar a <b>-1:30</b>, mesmo que tenha sido silenciado antes.</li>
+          <li>O botão <b>Limpar</b> apaga identificação e hora, mas não apaga o histórico de timers.</li>
+          <li>O botão <b>Parar</b> encerra o timer atual e deixa o card em estado neutro (idle), mantendo o histórico.</li>
+          <li>A barrinha colorida na lateral identifica cada chat e ajuda a diferenciar visualmente.</li>
+        </ul>
+      </div>
+      <div id="help-page-2" class="help-page" style="display:none;">
+        <ul class="help-list">
+          <li>Você pode arrastar qualquer card para reorganizar a ordem dos chats na grade.</li>
+          <li>No layout vertical, você pode <b>arrastar também os botões laterais</b>: a ordem dos botões reorganiza automaticamente os cards.</li>
+          <li>O volume, o tipo de som, o tema (claro/escuro) e o layout (lado a lado / vertical) podem ser ajustados no topo da tela.</li>
+          <li>Ao colar um horário no campo “Hora msg”, você pode usar o botão <b>Colar</b> ou simplesmente usar CTRL+V.</li>
+          <li>As notificações do navegador, quando permitidas, mostram o nome do cliente que você colocou em <b>Identificação</b>, junto com o número do chat.</li>
+          <li>Os botões de <b>fluxo de inatividade</b> (Fluxo 5-2-1, Fluxo 3-2-1, Fechar 2+1m) apenas automatizam sequências de holds.</li>
+          <li>No layout vertical, use os botões à esquerda para ir direto ao chat desejado; eles mostram o nome do cliente e o tempo atual do timer.</li>
+          <li>Quando o timer passa de 0, o tempo fica negativo (começa com “–”), para você ver quanto estourou e se aproximar do fechamento.</li>
+          <li>As prioridades <b>P1, P2, P3, P4</b> são definidas por atalho de teclado no chat ativo (Alt+Shift+1..4) e a bolinha colorida aparece automaticamente ao lado do nome do chat e no botão lateral apenas quando alguma prioridade existir.</li>
+        </ul>
+      </div>
+      <div class="help-pagination">
+        <button id="help-prev" class="help-page-btn" disabled>Anterior</button>
+        <span id="help-page-indicator" class="help-page-indicator">Página 1/2</span>
+        <button id="help-next" class="help-page-btn">Próxima</button>
+      </div>
       <button id="help-close" class="help-close">Fechar</button>
+    </div>
+  </div>
+
+  <!-- Ajuda de atalhos -->
+  <div id="shortcut-modal" class="help-modal">
+    <div class="help-content">
+      <div class="help-title">Atalhos de teclado &amp; layout</div>
+      <ul class="help-list">
+        <li><b>Q, W, E, R:</b> trocam o chat ativo para o Chat 1, 2, 3 ou 4.</li>
+        <li><b>1, 2, 3, 4:</b> no chat ativo, iniciam respectivamente hold de 1m, 2m, 3m, 5m.</li>
+        <li><b>F, G, H, J:</b> no chat ativo, definem a prioridade como P1, P2, P3 ou P4.</li>
+        <li><b>0:</b> remove a prioridade do chat ativo.</li>
+        <li><b>Z:</b> no chat ativo, inicia o fluxo 5-2-1.</li>
+        <li><b>X:</b> no chat ativo, inicia o fluxo 3-2-1.</li>
+        <li><b>B:</b> no chat ativo, inicia o fluxo 2+1 (fechamento sem resposta).</li>
+        <li><b>C:</b> no chat ativo, para o timer atual.</li>
+        <li><b>M:</b> no chat ativo, alterna entre silenciar e reativar o som do chat.</li>
+        <li><b>L:</b> no chat ativo, limpa identificação e hora (igual ao botão 🧹 Limpar).</li>
+        <li><b>S:</b> alterna o som geral (igual ao botão “Silenciar todos / Reativar som geral”).</li>
+        <li><b>T:</b> alterna o tema claro/escuro.</li>
+        <li><b>V:</b> alterna o layout vertical / lado a lado.</li>
+        <li>Os atalhos só funcionam quando você não está digitando em um campo de texto.</li>
+      </ul>
+      <button id="shortcut-close" class="help-close">Fechar</button>
+    </div>
+  </div>
+
+  <!-- Changelog / Atualizações recentes -->
+  <div id="changelog-modal" class="help-modal">
+    <div class="help-content">
+      <div class="help-title">Atualizações recentes</div>
+      <ul class="help-list">
+        <li><b>v1.4.0 – 03/12/2025</b><br>
+          • Atalhos de uma tecla para todos os comandos principais (Q/W/E/R, 1/2/3/4, F/G/H/J, Z/X/B, etc).<br>
+          • Persistência leve no F5 (prioridade, histórico de minutos, mute, fluxo, tema, layout, som), sem salvar textos de cliente.</li>
+        <li><b>v1.4.1 – 03/12/2025</b><br>
+          • Reorganização automática dos cards estourados: mais estourados sobem, com prioridade P1–P4 influenciando a ordem.</li>
+      </ul>
+      <button id="changelog-close" class="help-close">Fechar</button>
     </div>
   </div>
 
   <script>
     const timers = {};
     let audioCtx = null;
-    let alarmVolume = 0.7;
+    let alarmVolume = 0.2;
     let soundType = 'triple';
     let notificationsEnabled = false;
     let activeChatId = '1';
+    let globalMute = false;
+
+    const NEGATIVE_REALERT_MS = 90_000; // -1:30
 
     const volumeSlider = document.getElementById('volume');
     const volumeValue = document.getElementById('volume-value');
@@ -1307,13 +1544,46 @@
     const testBtn = document.getElementById('test-alarm');
     const themeToggle = document.getElementById('theme-toggle');
     const layoutToggle = document.getElementById('layout-toggle');
+    const densityToggle = document.getElementById('density-toggle');
     const layoutContainer = document.getElementById('layout-container');
     const clockEl = document.getElementById('clock');
     const helpBtn = document.getElementById('help-btn');
     const helpModal = document.getElementById('help-modal');
     const helpClose = document.getElementById('help-close');
+    const helpPrev = document.getElementById('help-prev');
+    const helpNext = document.getElementById('help-next');
+    const helpPageIndicator = document.getElementById('help-page-indicator');
+    const helpPages = [
+      document.getElementById('help-page-1'),
+      document.getElementById('help-page-2')
+    ];
+    let helpCurrentPage = 0;
+
     const muteAllBtn = document.getElementById('mute-all-btn');
+    const clearAllBtn = document.getElementById('clear-all-btn');
     const navButtons = document.querySelectorAll('.chat-nav-btn');
+    const navContainer = document.querySelector('.chat-nav');
+
+    const shortcutBtn = document.getElementById('shortcut-help-btn');
+    const shortcutModal = document.getElementById('shortcut-modal');
+    const shortcutClose = document.getElementById('shortcut-close');
+    const changelogBtn = document.getElementById('changelog-btn');
+    const changelogModal = document.getElementById('changelog-modal');
+    const changelogClose = document.getElementById('changelog-close');
+
+    function updateMuteAllButton() {
+      if (globalMute) {
+        muteAllBtn.textContent = 'Reativar som geral';
+      } else {
+        muteAllBtn.textContent = 'Silenciar todos';
+      }
+    }
+
+    updateMuteAllButton();
+
+    // volume inicial
+    alarmVolume = Number(volumeSlider.value) / 100;
+    volumeValue.textContent = volumeSlider.value + '%';
 
     // ====== NOTIFICAÇÕES DESKTOP ======
     if ('Notification' in window) {
@@ -1350,7 +1620,121 @@
       }
     }
 
-    // ====== RELÓGIO ======
+    
+    const STORAGE_KEY = 'timer_sla_state_v1';
+
+    function collectState() {
+      const cards = document.querySelectorAll('.card');
+      const chats = {};
+      cards.forEach(card => {
+        const id = card.dataset.id;
+        const t = timers[id] || {};
+        const pill = card.querySelector('.priority-pill');
+        const priority = pill ? Number(pill.dataset.priority || '0') : 0;
+        chats[id] = {
+          priority,
+          manualMuted: !!t.manualMuted,
+          lastMinutes: t.lastMinutes || null,
+          historyMinutes: (t.history || []).map(h => h.minutes),
+          flowType: t.flowType || null,
+          inactivityStep: t.inactivityStep || 0
+        };
+      });
+      const state = {
+        activeChatId,
+        globalMute,
+        volume: Number(volumeSlider.value),
+        soundType,
+        layout: layoutContainer.classList.contains('layout-vertical') ? 'vertical' : 'horizontal',
+        theme: document.body.classList.contains('theme-light') ? 'light' : 'dark',
+        density: document.body.classList.contains('density-compact') ? 'compact' : 'normal',
+        chats
+      };
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (e) {
+        console.log('Não foi possível salvar o estado:', e);
+      }
+    }
+
+    function restoreState() {
+      let raw;
+      try {
+        raw = localStorage.getItem(STORAGE_KEY);
+      } catch (e) {
+        console.log('Não foi possível ler o estado salvo:', e);
+        return;
+      }
+      if (!raw) return;
+      let state;
+      try {
+        state = JSON.parse(raw);
+      } catch (e) {
+        console.log('Estado salvo inválido:', e);
+        return;
+      }
+      if (!state || !state.chats) return;
+
+      if (typeof state.volume === 'number') {
+        volumeSlider.value = String(state.volume);
+        alarmVolume = state.volume / 100;
+        volumeValue.textContent = state.volume + '%';
+      }
+      if (state.soundType) {
+        soundType = state.soundType;
+        soundSelect.value = soundType;
+      }
+      if (typeof state.globalMute === 'boolean') {
+        globalMute = state.globalMute;
+        updateMuteAllButton();
+      }
+      if (state.theme) {
+        applyTheme(state.theme);
+      }
+      if (state.layout) {
+        applyLayout(state.layout);
+      }
+
+      Object.entries(state.chats).forEach(([id, data]) => {
+        const card = document.querySelector(`.card[data-id="${id}"]`);
+        if (!card) return;
+
+        clearCardState(card);
+
+        timers[id] = timers[id] || {};
+        const t = timers[id];
+        t.manualMuted = !!data.manualMuted;
+        t.lastMinutes = data.lastMinutes || null;
+        t.flowType = data.flowType || null;
+        t.inactivityStep = data.inactivityStep || 0;
+        t.history = (data.historyMinutes || []).map(m => ({ minutes: m }));
+        t.expiredNotified = false;
+        t.alarmInterval = null;
+        t.interval = null;
+        t.currentMinutes = null;
+        t.originalDurationMs = 0;
+        t.negativeRealertDone = false;
+
+        updateHistoryDisplay(card, t.history, t.lastMinutes);
+        updateLastTimerDisplay(card, t.lastMinutes, null);
+        highlightLastButton(card, t.lastMinutes);
+        setCardPriority(card, data.priority || 0);
+        updateSoundBadgeForCard(id);
+        syncNavWithCard(id);
+      });
+
+      if (state.activeChatId) {
+        setActiveCard(String(state.activeChatId), false);
+      } else {
+        setActiveCard(activeChatId || '1', false);
+      }
+
+      if (state.density === 'compact') {
+        applyDensity('compact');
+      }
+    }
+
+// ====== RELÓGIO ======
     function updateClock() {
       const now = new Date();
       const hh = String(now.getHours()).padStart(2, "0");
@@ -1361,8 +1745,34 @@
     updateClock();
     setInterval(updateClock, 1000);
 
-    // ====== AJUDA ======
+    // ====== AJUDA GERAL (PÁGINAS) ======
+    function renderHelpPage() {
+      helpPages.forEach((p, idx) => {
+        p.style.display = idx === helpCurrentPage ? 'block' : 'none';
+      });
+      helpPrev.disabled = helpCurrentPage === 0;
+      helpNext.disabled = helpCurrentPage === helpPages.length - 1;
+      helpPageIndicator.textContent = `Página ${helpCurrentPage + 1}/${helpPages.length}`;
+    }
+    renderHelpPage();
+
+    helpPrev.addEventListener('click', () => {
+      if (helpCurrentPage > 0) {
+        helpCurrentPage--;
+        renderHelpPage();
+      }
+    });
+
+    helpNext.addEventListener('click', () => {
+      if (helpCurrentPage < helpPages.length - 1) {
+        helpCurrentPage++;
+        renderHelpPage();
+      }
+    });
+
     helpBtn.addEventListener('click', () => {
+      helpCurrentPage = 0;
+      renderHelpPage();
       helpModal.classList.add('open');
     });
 
@@ -1376,6 +1786,45 @@
       }
     });
 
+    // Ajuda de atalhos / layout
+    shortcutBtn.addEventListener('click', () => {
+      shortcutModal.classList.add('open');
+    });
+
+    shortcutClose.addEventListener('click', () => {
+      shortcutModal.classList.remove('open');
+    });
+
+    shortcutModal.addEventListener('click', (e) => {
+      if (e.target === shortcutModal) {
+        shortcutModal.classList.remove('open');
+      }
+    });
+
+    // Changelog
+    if (changelogBtn && changelogModal && changelogClose) {
+      changelogBtn.addEventListener('click', () => {
+        changelogModal.classList.add('open');
+      });
+      changelogClose.addEventListener('click', () => {
+        changelogModal.classList.remove('open');
+      });
+      changelogModal.addEventListener('click', (e) => {
+        if (e.target === changelogModal) {
+          changelogModal.classList.remove('open');
+        }
+      });
+    }
+
+    // Abre uma vez o modal de atalhos na primeira utilização
+    const SHORTCUT_HELP_KEY = 'timer_sla_shortcut_help_seen';
+    if (!localStorage.getItem(SHORTCUT_HELP_KEY)) {
+      setTimeout(() => {
+        shortcutModal.classList.add('open');
+      }, 800);
+      localStorage.setItem(SHORTCUT_HELP_KEY, '1');
+    }
+
     // ====== THEME ======
     function applyTheme(theme) {
       document.body.classList.remove('theme-dark', 'theme-light');
@@ -1386,6 +1835,7 @@
         themeToggle.textContent = 'Modo claro';
       }
       localStorage.setItem('timer_sla_theme', theme);
+      collectState();
     }
 
     const savedTheme = localStorage.getItem('timer_sla_theme') || 'dark';
@@ -1396,7 +1846,7 @@
       applyTheme(current === 'light' ? 'dark' : 'light');
     });
 
-    // ====== NAV HELPERS ======
+    // ====== NAV ======
     function getNavButton(id) {
       return document.querySelector(`.chat-nav-btn[data-target="${id}"]`);
     }
@@ -1404,10 +1854,26 @@
     function setNavBlink(id, on) {
       const btn = getNavButton(id);
       if (!btn) return;
-      if (on) {
-        btn.classList.add('nav-blink');
-      } else {
-        btn.classList.remove('nav-blink');
+      if (on) btn.classList.add('nav-blink');
+      else btn.classList.remove('nav-blink');
+    }
+
+    function updateNavPriority(id) {
+      const card = document.querySelector(`.card[data-id="${id}"]`);
+      const btn = getNavButton(id);
+      if (!card || !btn) return;
+
+      const pill = card.querySelector('.priority-pill');
+      const level = pill ? (pill.dataset.priority || '0') : '0';
+      const navPri = btn.querySelector('.nav-priority');
+      if (!navPri) return;
+
+      navPri.textContent = '';
+      navPri.className = 'nav-priority';
+
+      if (level !== '0') {
+        navPri.textContent = `P${level}`;
+        navPri.classList.add(`priority-p${level}`);
       }
     }
 
@@ -1452,22 +1918,55 @@
         btn.classList.add('nav-idle');
         if (timeSpan) timeSpan.classList.remove('blink-time');
       }
+
+      updateNavPriority(id);
+    }
+
+    // ====== BADGE DE SOM ======
+    function updateSoundBadgeForCard(id) {
+      const card = document.querySelector(`.card[data-id="${id}"]`);
+      if (!card) return;
+      const soundBadge = card.querySelector('.sound-badge');
+      if (!soundBadge) return;
+
+      const t = timers[id];
+      soundBadge.textContent = '';
+      soundBadge.classList.remove('sound-on', 'sound-off');
+      soundBadge.removeAttribute('title');
+
+      if (globalMute) {
+        soundBadge.textContent = '🔇 Som geral off';
+        soundBadge.classList.add('sound-off');
+        soundBadge.title = 'Som desativado para todos os chats';
+        return;
+      }
+
+      if (t && t.manualMuted) {
+        soundBadge.textContent = '🔇 Som off';
+        soundBadge.classList.add('sound-off');
+        soundBadge.title = 'Alarme silenciado para este chat';
+        return;
+      }
+
+      if (t && t.alarmInterval && card.classList.contains('expired')) {
+        soundBadge.textContent = '🔊 Som ativo';
+        soundBadge.classList.add('sound-on');
+        soundBadge.title = 'Alarme ativo para este chat';
+      }
     }
 
     // ====== LAYOUT (HORIZONTAL / VERTICAL) ======
     function setActiveCard(id, scrollIntoView = false) {
       activeChatId = String(id);
       navButtons.forEach(btn => {
-        if (btn.dataset.target === String(id)) {
-          btn.classList.add('active');
-        } else {
-          btn.classList.remove('active');
-        }
+        if (btn.dataset.target === String(id)) btn.classList.add('active');
+        else btn.classList.remove('active');
       });
       if (scrollIntoView) {
         const card = document.querySelector(`.card[data-id="${id}"]`);
         if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
+      collectState();
     }
 
     function applyLayout(mode) {
@@ -1481,15 +1980,52 @@
         layoutToggle.textContent = 'Layout vertical';
       }
       localStorage.setItem('timer_sla_layout', mode);
+      collectState();
+    }
+
+    function applyDensity(mode) {
+      document.body.classList.toggle('density-compact', mode === 'compact');
+      if (densityToggle) {
+        densityToggle.textContent = mode === 'compact' ? 'Modo espaçado' : 'Modo compacto';
+      }
+      try {
+        const stateRaw = localStorage.getItem(STORAGE_KEY);
+        if (stateRaw) {
+          const state = JSON.parse(stateRaw);
+          state.density = mode === 'compact' ? 'compact' : 'normal';
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        }
+      } catch (e) {
+        // se der erro no localStorage, ignora silenciosamente
+      }
     }
 
     const savedLayout = localStorage.getItem('timer_sla_layout') || 'horizontal';
     applyLayout(savedLayout);
 
+    const savedDensity = (function() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return 'normal';
+        const state = JSON.parse(raw);
+        return state.density === 'compact' ? 'compact' : 'normal';
+      } catch (e) {
+        return 'normal';
+      }
+    })();
+    applyDensity(savedDensity);
+
     layoutToggle.addEventListener('click', () => {
       const current = layoutContainer.classList.contains('layout-vertical') ? 'vertical' : 'horizontal';
       applyLayout(current === 'vertical' ? 'horizontal' : 'vertical');
     });
+
+    if (densityToggle) {
+      densityToggle.addEventListener('click', () => {
+        const isCompact = document.body.classList.contains('density-compact');
+        applyDensity(isCompact ? 'normal' : 'compact');
+      });
+    }
 
     navButtons.forEach(btn => {
       btn.addEventListener('click', () => {
@@ -1502,10 +2038,12 @@
     volumeSlider.addEventListener('input', () => {
       alarmVolume = Number(volumeSlider.value) / 100;
       volumeValue.textContent = volumeSlider.value + '%';
+      collectState();
     });
 
     soundSelect.addEventListener('change', () => {
       soundType = soundSelect.value;
+      collectState();
     });
 
     function ensureAudioCtx() {
@@ -1551,12 +2089,18 @@
     });
 
     // ====== TEMPO ======
-    function formatTime(ms) {
-      if (ms < 0) ms = 0;
+    function formatTime(ms, allowNegative = false) {
+      let negative = false;
+      if (allowNegative && ms < 0) {
+        negative = true;
+        ms = Math.abs(ms);
+      } else if (ms < 0) {
+        ms = 0;
+      }
       const totalSec = Math.floor(ms / 1000);
       const m = String(Math.floor(totalSec / 60)).padStart(2, "0");
       const s = String(totalSec % 60).padStart(2, "0");
-      return `${m}:${s}`;
+      return (negative ? '-' : '') + `${m}:${s}`;
     }
 
     function extractTimeString(str) {
@@ -1620,59 +2164,50 @@
       const historyEl = card.querySelector(".history-msg");
       if (historyEl) historyEl.textContent = "";
 
-      syncNavWithCard(card.dataset.id);
+      const id = card.dataset.id;
+      syncNavWithCard(id);
+      updateSoundBadgeForCard(id);
     }
 
-    function stopAlarm(id) {
+    function stopAlarm(id, options = {}) {
       const t = timers[id];
       if (!t) return;
       if (t.alarmInterval) {
         clearInterval(t.alarmInterval);
         t.alarmInterval = null;
       }
-      t.manualMuted = true;
       const card = document.querySelector(`.card[data-id="${id}"]`);
       if (card) {
         card.classList.remove("alarming");
-        const soundBadge = card.querySelector(".sound-badge");
-        if (soundBadge) {
-          if (card.classList.contains("expired")) {
-            soundBadge.textContent = "🔇 Som off";
-            soundBadge.classList.add("sound-off");
-            soundBadge.classList.remove("sound-on");
-            soundBadge.title = "Alarme silenciado para este chat";
-          } else {
-            soundBadge.textContent = "";
-            soundBadge.classList.remove("sound-on", "sound-off");
-            soundBadge.removeAttribute("title");
+        if (options.fromManual) {
+          t.manualMuted = true;
+          const status = card.querySelector(".status-msg");
+          if (card.classList.contains("expired") && status && status.textContent.includes("Tempo esgotado")) {
+            status.textContent = "Tempo esgotado (alarme silenciado)";
           }
         }
       }
+      updateSoundBadgeForCard(id);
     }
 
     function startAlarm(id) {
       const t = timers[id];
-      if (!t || t.manualMuted) return;
+      if (!t || t.manualMuted || globalMute) return;
       if (t.alarmInterval) return;
 
       const card = document.querySelector(`.card[data-id="${id}"]`);
       if (card) {
         card.classList.add("alarming");
-        const soundBadge = card.querySelector(".sound-badge");
-        if (soundBadge) {
-          soundBadge.textContent = "🔊 Som ativo";
-          soundBadge.classList.add("sound-on");
-          soundBadge.classList.remove("sound-off");
-          soundBadge.title = "Alarme ativo para este chat";
-        }
       }
 
       playAlarmPattern();
       t.alarmInterval = setInterval(() => {
-        if (!t.manualMuted) {
+        if (!t.manualMuted && !globalMute) {
           playAlarmPattern();
         }
       }, 1500);
+
+      updateSoundBadgeForCard(id);
     }
 
     function updateHistoryDisplay(card, historyArr, currentMinutes) {
@@ -1768,7 +2303,8 @@
         }
       }
 
-      const endTime = baseTime + minutes * 60 * 1000;
+      const originalDurationMs = minutes * 60 * 1000;
+      const endTime = baseTime + originalDurationMs;
       const startNow = Date.now();
 
       const newHistory = [...prevHistory, {
@@ -1789,7 +2325,9 @@
         inactivityStep: options.inactivityStep ?? 0,
         flowType: options.flowType || null,
         awaitingFlowConfirm: false,
-        currentMinutes: minutes
+        currentMinutes: minutes,
+        originalDurationMs,
+        negativeRealertDone: false
       };
 
       card.classList.remove("idle", "warn", "danger", "expired", "blink", "alarming", "start-anim");
@@ -1805,13 +2343,7 @@
       updateHistoryDisplay(card, trimmedHistory, minutes);
       highlightLastButton(card, minutes);
 
-      const soundBadge = card.querySelector(".sound-badge");
-      if (soundBadge) {
-        soundBadge.textContent = "";
-        soundBadge.classList.remove("sound-on", "sound-off");
-        soundBadge.removeAttribute("title");
-      }
-
+      updateSoundBadgeForCard(id);
       syncNavWithCard(id);
 
       timers[id].interval = setInterval(() => {
@@ -1821,10 +2353,16 @@
         const timeElInner = card.querySelector(".time");
         const statusNow = card.querySelector(".status-msg");
 
-        timeElInner.textContent = formatTime(diff);
+        timeElInner.textContent = formatTime(diff, true);
 
         card.classList.remove("ok", "warn", "danger", "expired", "blink", "alarming");
         timeElInner.classList.remove("blink-time");
+
+        // Alerta extra em -1:30 se estiver silenciado (individual ou geral)
+        if (!t.negativeRealertDone && diff <= -NEGATIVE_REALERT_MS && (t.manualMuted || globalMute)) {
+          t.negativeRealertDone = true;
+          playAlarmPattern(); // beep extra independente do mute
+        }
 
         if (diff >= 60_000) {
           card.classList.add("ok");
@@ -1837,10 +2375,11 @@
           statusNow.textContent = "Quase estourando";
         } else {
           card.classList.add("expired");
-          timeElInner.textContent = "00:00";
           timeElInner.classList.add("blink-time");
-          statusNow.textContent = "Tempo esgotado – responda e depois silencie o alarme";
-          if (!t.expiredNotified && !t.manualMuted) {
+          const overdueMs = -diff;
+          const overdueText = formatTime(overdueMs, false);
+          statusNow.textContent = `Tempo esgotado há ${overdueText} – responda o cliente`;
+          if (!t.expiredNotified && !t.manualMuted && !globalMute) {
             t.expiredNotified = true;
             startAlarm(id);
             showExpireNotification(id);
@@ -1849,8 +2388,10 @@
           handleFlowOnExpire(card, id);
         }
 
+        updateSoundBadgeForCard(id);
         syncNavWithCard(id);
-      }, 200);
+        }, 200);
+      collectState();
     }
 
     function cancelTimer(card) {
@@ -1872,7 +2413,9 @@
         inactivityStep: 0,
         flowType: null,
         awaitingFlowConfirm: false,
-        currentMinutes: null
+        currentMinutes: null,
+        originalDurationMs: 0,
+        negativeRealertDone: false
       };
       clearCardState(card);
       updateLastTimerDisplay(card, null, null);
@@ -1880,6 +2423,8 @@
       highlightLastButton(card, null);
       setNavBlink(id, false);
       syncNavWithCard(id);
+      updateSoundBadgeForCard(id);
+      collectState();
     }
 
     // ====== FLUXOS ======
@@ -1964,6 +2509,30 @@
         useFieldBase
       });
       setFlowMessage(card, "🔁 Fluxo de inatividade iniciado. O próximo passo depende da sua interação com o cliente.");
+      collectState();
+    }
+
+    // ====== PRIORIDADES ======
+    function updatePriorityVisual(card, level) {
+      const pill = card.querySelector('.priority-pill');
+      if (!pill) return;
+      const lvlStr = String(level);
+      pill.dataset.priority = lvlStr;
+      pill.textContent = '';
+      pill.classList.remove('priority-p1','priority-p2','priority-p3','priority-p4');
+
+      if (lvlStr !== '0') {
+        pill.textContent = `P${lvlStr}`;
+        pill.classList.add(`priority-p${lvlStr}`);
+      }
+
+      const id = card.dataset.id;
+      updateNavPriority(id);
+      collectState();
+    }
+
+    function setCardPriority(card, level) {
+      updatePriorityVisual(card, level);
     }
 
     // ====== INICIALIZAÇÃO DOS CARDS ======
@@ -1979,6 +2548,7 @@
       const flowBtns = card.querySelectorAll(".btn-flow");
       const flowMsg = card.querySelector(".flow-msg");
       const fieldToggle = card.querySelector(".time-toggle");
+      const priorityPill = card.querySelector(".priority-pill");
 
       labelInput.addEventListener("focus", (e) => e.target.select());
       timeInput.addEventListener("focus", (e) => e.target.select());
@@ -2025,6 +2595,7 @@
             useFieldBase: false
           });
           setFlowMessage(card, "🔁 Próximo hold iniciado a partir da sua última resposta.");
+          collectState();
         }
       });
 
@@ -2033,17 +2604,35 @@
       });
 
       btnMute.addEventListener("click", () => {
-        stopAlarm(id);
-        const status = card.querySelector(".status-msg");
-        if (card.classList.contains("expired")) {
-          status.textContent = "Tempo esgotado (alarme silenciado)";
+        const t = timers[id];
+        const cardEl = card;
+        if (!t) {
+          return;
         }
+        const status = cardEl.querySelector(".status-msg");
+
+        if (t.manualMuted) {
+          // reativar som local
+          t.manualMuted = false;
+          if (cardEl.classList.contains("expired") && !t.alarmInterval && !globalMute) {
+            startAlarm(id);
+            if (status && status.textContent.includes("Tempo esgotado")) {
+              status.textContent = "Tempo esgotado – som reativado";
+            }
+          }
+        } else {
+          // silenciar manualmente
+          stopAlarm(id, { fromManual: true });
+        }
+
+        updateSoundBadgeForCard(id);
+        collectState();
       });
 
       btnClear.addEventListener("click", () => {
         labelInput.value = "";
         timeInput.value = "";
-        fieldToggle.checked = false;
+        fieldToggle.checked = true;
         setTimeFieldEnabled(card, fieldToggle.checked);
         labelInput.focus();
         syncNavWithCard(id);
@@ -2070,27 +2659,200 @@
         }
       });
 
-      // sync inicial da nav
+      if (priorityPill) {
+        // inicia sem prioridade (bolinha escondida)
+        updatePriorityVisual(card, 0);
+        // ainda permite clicar, mas a ideia é usar atalhos avançados:
+        priorityPill.addEventListener('click', () => {
+          const current = Number(priorityPill.dataset.priority || '0');
+          const next = (current + 1) % 5; // 0 -> 1 -> 2 -> 3 -> 4 -> 0
+          updatePriorityVisual(card, next);
+        });
+      }
+
       syncNavWithCard(id);
+      updateSoundBadgeForCard(id);
     });
 
-    // ====== SILENCIAR TODOS ======
+    // Restaura estado leve (sem textos sensíveis)
+    restoreState();
+
+    
+        // ====== REORGANIZAÇÃO AUTOMÁTICA DE CARDS ESTOURADOS ======
+    function reorderExpiredCards() {
+      const grid = document.querySelector('.grid');
+      if (!grid) return;
+
+      // Só reorganiza no layout vertical e quando nada está sendo arrastado
+      if (!layoutContainer.classList.contains('layout-vertical')) return;
+      if (document.querySelector('.card.dragging') || document.querySelector('.chat-nav-btn.dragging')) return;
+
+      const cards = Array.from(grid.querySelectorAll('.card'));
+      if (!cards.length) return;
+
+      const now = Date.now();
+      const expired = [];
+      const normal = [];
+
+      cards.forEach((card, index) => {
+        const id = card.dataset.id;
+        const t = timers[id];
+        const isExpired = card.classList.contains('expired') && t && typeof t.endTime === 'number';
+
+        if (isExpired) {
+          const overdueMs = Math.max(0, now - t.endTime);
+          const pill = card.querySelector('.priority-pill');
+          const lvl = pill ? Number(pill.dataset.priority || '0') : 0;
+          // P1 maior peso, depois P2, P3, P4, por fim sem prioridade
+          const priorityScore = lvl === 0 ? 0 : (5 - lvl);
+          expired.push({
+            card,
+            id,
+            overdueMs,
+            priorityScore,
+            originalIndex: index
+          });
+        } else {
+          normal.push({ card, id, originalIndex: index });
+        }
+      });
+
+      if (!expired.length) return;
+
+      // Ordena: prioridade > mais estourado > ordem original
+      expired.sort((a, b) => {
+        if (b.priorityScore !== a.priorityScore) {
+          return b.priorityScore - a.priorityScore;
+        }
+        if (b.overdueMs !== a.overdueMs) {
+          return b.overdueMs - a.overdueMs;
+        }
+        return a.originalIndex - b.originalIndex;
+      });
+
+      // Mantém ordem relativa dos demais
+      normal.sort((a, b) => a.originalIndex - b.originalIndex);
+
+      const desired = expired.concat(normal);
+
+      // Verifica se a ordem realmente mudou antes de mexer na DOM
+      const currentIds = cards.map(c => c.dataset.id);
+      const desiredIds = desired.map(item => item.id);
+      let changed = false;
+      for (let i = 0; i < currentIds.length; i++) {
+        if (currentIds[i] !== desiredIds[i]) {
+          changed = true;
+          break;
+        }
+      }
+      if (!changed) return;
+
+      // Reorganiza os cards
+      desired.forEach(item => {
+        if (item.card.parentElement === grid) {
+          grid.appendChild(item.card);
+        }
+      });
+
+      // Reorganiza também os botões laterais na mesma ordem
+      const nav = document.querySelector('.chat-nav');
+      if (nav) {
+        const btnMap = {};
+        nav.querySelectorAll('.chat-nav-btn').forEach(btn => {
+          btnMap[btn.dataset.target] = btn;
+        });
+
+        desired.forEach(item => {
+          const btn = btnMap[item.id];
+          if (btn && btn.parentElement === nav) {
+            nav.appendChild(btn);
+          }
+        });
+      }
+    }
+
+    const REORDER_INTERVAL_MS = 1000;
+    setInterval(() => {
+      try {
+        reorderExpiredCards();
+      } catch (e) {
+        console.error('Erro ao reorganizar cards expirados', e);
+      }
+    }, REORDER_INTERVAL_MS);
+
+// ====== SILENCIAR TODOS ======
     muteAllBtn.addEventListener("click", () => {
+      globalMute = !globalMute;
+      updateMuteAllButton();
+
       Object.keys(timers).forEach(id => {
+        const t = timers[id];
         const card = document.querySelector(`.card[data-id="${id}"]`);
-        stopAlarm(id);
-        if (card && card.classList.contains("expired")) {
-          const status = card.querySelector(".status-msg");
-          if (status && status.textContent.includes("Tempo esgotado")) {
-            status.textContent = "Tempo esgotado (alarme silenciado)";
+        if (!card || !t) return;
+        const status = card.querySelector(".status-msg");
+
+        if (globalMute) {
+          // desligar som geral: para alarmes em todos, sem marcar manualMuted
+          if (t.alarmInterval) {
+            clearInterval(t.alarmInterval);
+            t.alarmInterval = null;
+          }
+          card.classList.remove("alarming");
+          if (card.classList.contains("expired") && status && status.textContent.includes("Tempo esgotado")) {
+            status.textContent = "Tempo esgotado (som geral off)";
+          }
+          setNavBlink(id, false);
+        } else {
+          // religar som geral: se estiver estourado e não estiver mutado manualmente, volta a tocar
+          if (card.classList.contains("expired") && !t.manualMuted) {
+            startAlarm(id);
+            if (status && status.textContent.includes("som geral off")) {
+              status.textContent = "Tempo esgotado – som reativado";
+            }
           }
         }
-        setNavBlink(id, false);
+
+        updateSoundBadgeForCard(id);
         syncNavWithCard(id);
       });
+      collectState();
     });
 
-    // ====== DRAG & DROP ======
+    // ====== LIMPAR TODOS ======
+    clearAllBtn.addEventListener("click", () => {
+      const ok = window.confirm(
+        "O botão 'Limpar todos' faz o seguinte:\n\n" +
+        "• Para todos os timers ativos em todos os chats;\n" +
+        "• Limpa identificação e horário de todos os chats;\n" +
+        "• Mantém apenas o histórico interno para consulta.\n\n" +
+        "Tem certeza que deseja continuar?"
+      );
+      if (!ok) return;
+
+      document.querySelectorAll(".card").forEach(card => {
+        const id = card.dataset.id;
+        cancelTimer(card);
+        const label = card.querySelector(".label-input");
+        const timeInput = card.querySelector(".time-input");
+        const fieldToggle = card.querySelector(".time-toggle");
+        if (label) label.value = "";
+        if (timeInput) timeInput.value = "";
+        if (fieldToggle) {
+          fieldToggle.checked = true;
+          setTimeFieldEnabled(card, true);
+        }
+        // zera prioridade também ao limpar tudo
+        const priorityPill = card.querySelector('.priority-pill');
+        if (priorityPill) {
+          updatePriorityVisual(card, 0);
+        }
+        syncNavWithCard(id);
+        updateSoundBadgeForCard(id);
+      });
+      collectState();
+    });
+
+    // ====== DRAG & DROP CARDS ======
     const cards = document.querySelectorAll(".card");
 
     cards.forEach(card => {
@@ -2134,6 +2896,214 @@
         grid.insertBefore(tgtCard, srcNext);
       });
     });
+
+    // ====== DRAG & DROP NAV (REORDENAÇÃO LATERAL) ======
+    let navDragSource = null;
+
+    function reorderCardsFromNav() {
+      if (!navContainer) return;
+      const grid = document.querySelector('.grid');
+      if (!grid) return;
+      const orderedIds = Array.from(navContainer.querySelectorAll('.chat-nav-btn'))
+        .map(btn => btn.dataset.target);
+      const cardMap = {};
+      document.querySelectorAll('.card').forEach(card => {
+        cardMap[card.dataset.id] = card;
+      });
+      orderedIds.forEach(id => {
+        const c = cardMap[id];
+        if (c) grid.appendChild(c);
+      });
+    }
+
+    if (navContainer) {
+      navButtons.forEach(btn => {
+        btn.addEventListener('dragstart', (e) => {
+          navDragSource = btn;
+          btn.classList.add('dragging');
+          e.dataTransfer.effectAllowed = 'move';
+          e.dataTransfer.setData('text/plain', btn.dataset.target);
+        });
+
+        btn.addEventListener('dragend', () => {
+          btn.classList.remove('dragging');
+          btn.classList.remove('drop-target');
+          navDragSource = null;
+        });
+
+        btn.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = 'move';
+        });
+
+        btn.addEventListener('dragenter', (e) => {
+          e.preventDefault();
+          btn.classList.add('drop-target');
+        });
+
+        btn.addEventListener('dragleave', () => {
+          btn.classList.remove('drop-target');
+        });
+
+        btn.addEventListener('drop', (e) => {
+          e.preventDefault();
+          btn.classList.remove('drop-target');
+          if (!navDragSource || navDragSource === btn) return;
+          const parent = navContainer;
+          const srcNext = navDragSource.nextSibling === btn ? navDragSource : navDragSource.nextSibling;
+          parent.insertBefore(navDragSource, btn);
+          parent.insertBefore(btn, srcNext);
+          reorderCardsFromNav();
+        });
+      });
+    }
+
+    // ====== ATALHOS DE TECLADO ======
+    function getActiveCard() {
+      return document.querySelector(`.card[data-id="${activeChatId}"]`);
+    }
+
+    document.addEventListener('keydown', (e) => {
+      // se algum modal importante estiver aberto, ignora atalhos
+      if (helpModal.classList.contains('open') ||
+          shortcutModal.classList.contains('open')) {
+        return;
+      }
+
+      const tag = (e.target.tagName || '').toLowerCase();
+      if (tag === 'input' || tag === 'textarea') return;
+
+      // ignorar combinações com Alt/Ctrl/Meta para evitar conflito com o navegador
+      if (e.altKey || e.ctrlKey || e.metaKey) return;
+
+      const card = getActiveCard();
+      if (!card) return;
+
+      // helper: clicar em botão dentro do card ativo
+      function clickBtn(selector) {
+        const btn = card.querySelector(selector);
+        if (btn) {
+          btn.click();
+          return true;
+        }
+        return false;
+      }
+
+      switch (e.key) {
+        // Troca de chat ativo (QWER)
+        case 'q':
+        case 'Q':
+          setActiveCard('1', true);
+          e.preventDefault();
+          break;
+        case 'w':
+        case 'W':
+          setActiveCard('2', true);
+          e.preventDefault();
+          break;
+        case 'e':
+        case 'E':
+          setActiveCard('3', true);
+          e.preventDefault();
+          break;
+        case 'r':
+        case 'R':
+          setActiveCard('4', true);
+          e.preventDefault();
+          break;
+
+        // Timers rápidos (1,2,3,4)
+        case '1':
+          if (clickBtn('.btn-time[data-minutes="1"]')) e.preventDefault();
+          break;
+        case '2':
+          if (clickBtn('.btn-time[data-minutes="2"]')) e.preventDefault();
+          break;
+        case '3':
+          if (clickBtn('.btn-time[data-minutes="3"]')) e.preventDefault();
+          break;
+        case '4':
+          if (clickBtn('.btn-time[data-minutes="5"]')) e.preventDefault();
+          break;
+
+        // Prioridades (F,G,H,J) e remover (0)
+        case 'f':
+        case 'F':
+          setCardPriority(card, 1); // P1
+          e.preventDefault();
+          break;
+        case 'g':
+        case 'G':
+          setCardPriority(card, 2); // P2
+          e.preventDefault();
+          break;
+        case 'h':
+        case 'H':
+          setCardPriority(card, 3); // P3
+          e.preventDefault();
+          break;
+        case 'j':
+        case 'J':
+          setCardPriority(card, 4); // P4
+          e.preventDefault();
+          break;
+        case '0':
+          setCardPriority(card, 0); // remove prioridade
+          e.preventDefault();
+          break;
+
+        // Fluxos (Z, X, B)
+        case 'z':
+        case 'Z':
+          handleFlowButtonClick(card, 'action'); // fluxo 5-2-1
+          e.preventDefault();
+          break;
+        case 'x':
+        case 'X':
+          handleFlowButtonClick(card, 'action_short'); // fluxo 3-2-1
+          e.preventDefault();
+          break;
+        case 'b':
+        case 'B':
+          handleFlowButtonClick(card, 'after_noresp'); // fluxo 2+1
+          e.preventDefault();
+          break;
+
+        // Controles do card
+        case 'c':
+        case 'C':
+          if (clickBtn('.btn-cancel')) e.preventDefault();
+          break;
+        case 'm':
+        case 'M':
+          if (clickBtn('.btn-mute')) e.preventDefault();
+          break;
+        case 'l':
+        case 'L':
+          if (clickBtn('.btn-clear')) e.preventDefault();
+          break;
+
+        // Controles gerais (fora do card)
+        case 's':
+        case 'S':
+          muteAllBtn.click();
+          e.preventDefault();
+          break;
+        case 't':
+        case 'T':
+          themeToggle.click();
+          e.preventDefault();
+          break;
+        case 'v':
+        case 'V':
+          layoutToggle.click();
+          e.preventDefault();
+          break;
+        default:
+          break;
+      }
+    });
+
   </script>
 </body>
 </html>
