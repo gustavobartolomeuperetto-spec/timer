@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -988,7 +990,6 @@ body.dark .cfm-name-row input { background:#1a1a2e; border-color:#333; }
     </div>
     <div class="shortcut-section">
       <div class="shortcut-section-title">Fluxos (chat ativo)</div>
-      <div class="shortcut-item"><span class="shortcut-desc">Fluxo 5-2-1</span><div class="shortcut-keys"><span class="shortcut-key">A</span></div></div>
       <div class="shortcut-item"><span class="shortcut-desc">Fluxo 3-2-1</span><div class="shortcut-keys"><span class="shortcut-key">S</span></div></div>
       <div class="shortcut-item"><span class="shortcut-desc">Sem Resposta 2+1</span><div class="shortcut-keys"><span class="shortcut-key">D</span></div></div>
     </div>
@@ -996,8 +997,7 @@ body.dark .cfm-name-row input { background:#1a1a2e; border-color:#333; }
       <div class="shortcut-section-title">Timers Manuais</div>
       <div class="shortcut-item"><span class="shortcut-desc">1 minuto</span><div class="shortcut-keys"><span class="shortcut-key">Q</span></div></div>
       <div class="shortcut-item"><span class="shortcut-desc">2 minutos</span><div class="shortcut-keys"><span class="shortcut-key">W</span></div></div>
-      <div class="shortcut-item"><span class="shortcut-desc">3 minutos</span><div class="shortcut-keys"><span class="shortcut-key">E</span></div></div>
-      <div class="shortcut-item"><span class="shortcut-desc">5 minutos</span><div class="shortcut-keys"><span class="shortcut-key">R</span></div></div>
+      <div class="shortcut-item"><span class="shortcut-desc">2:45</span><div class="shortcut-keys"><span class="shortcut-key">E</span></div></div>
       <div class="shortcut-item"><span class="shortcut-desc">Parar timer</span><div class="shortcut-keys"><span class="shortcut-key">X</span></div></div>
     </div>
     <div class="shortcut-section">
@@ -1354,8 +1354,9 @@ function importPrefs(file) {
 }
 
 function applyAllPrefsToUI() {
-  // Tema
-  document.body.className = 'theme-' + (state.settings.theme || 'dark');
+      // Tema
+    document.body.classList.remove('theme-dark', 'theme-light');
+    document.body.classList.add('theme-' + (state.settings.theme || 'dark'));
   // Volume
   const volEl = document.getElementById('volume');
   if (volEl) { volEl.value = state.settings.volume; document.getElementById('volume-value').textContent = state.settings.volume + '%'; }
@@ -2042,8 +2043,7 @@ function startTimer(cardId, minutes, isFlow=false) {
   } else {
     updateTimerBtnHighlight(cardId, null); // limpa destaque manual se iniciou fluxo
   }
-  const timerLabel = minutes === 5 ? '⚡ Um Momento (5min)'
-                   : minutes === 3 ? '🔇 Dead Air (3min)'
+    const timerLabel = minutes === 2.75 ? '🔇 Dead Air (2:45)'
                    : `${minutes}min`;
   showToast('Timer Iniciado', `${timerLabel} – Chat ${cardId}`, '⏱️');
 }
@@ -2308,8 +2308,7 @@ function createCard(id=null) {
 <div class="btn-group">
   <button class="btn-timer" data-minutes="1">⏱ 1min</button>
   <button class="btn-timer" data-minutes="2">⏱ 2min</button>
-  <button class="btn-timer" data-minutes="3">⏱ 3min</button>
-  <button class="btn-timer" data-minutes="5">⏱ 5min</button>
+     <button class="btn-timer" data-minutes="2.75">⏱ 2:45</button>
   <button class="btn-timer btn-custom-timer" data-action="custom">✏️ Editar</button>
 </div>
 
@@ -2319,7 +2318,6 @@ function createCard(id=null) {
   <div class="flow-indicator-steps"></div>
 </div>
 <div class="btn-group iohana-flow-group">
-  <button class="btn-flow" data-flow="action">⚡ Fluxo 5-2-1</button>
   <button class="btn-flow" data-flow="action_short">🚀 Fluxo 3-2-1</button>
   <button class="btn-flow" data-flow="noresp">📞 Sem Resposta 2+1</button>
 </div>
@@ -2651,8 +2649,8 @@ function updateTimerBtnHighlight(cardId, minutes) {
 function showTimerBadge(cardId, minutes) {
   const card = document.querySelector(`[data-card-id="${cardId}"]`);
   if (!card) return;
-  if (minutes !== 5 && minutes !== 3) { clearTimerBadge(cardId); return; }
-  const label = minutes === 5 ? '⚡ Um Momento' : '🔇 Dead Air';
+  if (minutes !== 2.75) { clearTimerBadge(cardId); return; }
+  const label = '🔇 Dead Air';
   let badge = card.querySelector('.timer-name-badge');
   if (!badge) {
     badge = document.createElement('div');
@@ -2674,7 +2672,7 @@ function clearTimerBadge(cardId) {
 
 function startFlow(id, type) {
   stopTimer(id);
-  const flows = {action:[5,2,1], action_short:[3,2,1], noresp:[2,1]};
+  const flows = {action_short:[3,2,1], noresp:[2,1]};
   const seq = flows[type]; if(!seq) return;
 
   clearTimerBadge(id);
@@ -2726,8 +2724,8 @@ function startFlow(id, type) {
   updateCardTimer(id);
   state.timers[id].interval = setInterval(()=>updateCardTimer(id), 200);
 
-  const names  = {action:'Fluxo 5-2-1', action_short:'Fluxo 3-2-1', noresp:'Encerramento Sem Resposta'};
-  const seqStr = {action:'5→2→1min', action_short:'3→2→1min', noresp:'2→1min'};
+  const names  = {action_short:'Fluxo 3-2-1', noresp:'Encerramento Sem Resposta'};
+  const seqStr = {action_short:'3→2→1min', noresp:'2→1min'};
   showToast(names[type]||'Fluxo Iniciado', seqStr[type], '🔁');
   updateFlowIndicator(id);
 }
@@ -3073,9 +3071,7 @@ function setupKeyboard() {
     switch(kl) {
       case 'q': startTimer(state.activeCard,1); break;
       case 'w': startTimer(state.activeCard,2); break;
-      case 'e': startTimer(state.activeCard,3); break;
-      case 'r': startTimer(state.activeCard,5); break;
-      case 'a': startFlow(state.activeCard,'action'); break;
+      case 'e': startTimer(state.activeCard,2.75); break;
       case 's': startFlow(state.activeCard,'action_short'); break;
       case 'd': startFlow(state.activeCard,'noresp'); break;
       case 'x': stopTimer(state.activeCard); break;
@@ -3171,7 +3167,9 @@ function init() {
   document.getElementById('toggle-theme').addEventListener('click', () => {
     state._themeManuallySet = true;
     state.settings.theme = state.settings.theme==='dark'?'light':'dark';
-    document.body.className=`theme-${state.settings.theme}`;
+    document.body.classList.remove('theme-dark', 'theme-light');
+    document.body.classList.add(`theme-${state.settings.theme}`);
+    applyAlertaClasses();
     savePrefs();
     showToast('Tema','','🌓');
   });
@@ -3290,7 +3288,23 @@ function init() {
   // ===== ALERTA VISUAL =====
   const alertaBtn = document.getElementById('alerta-visual-btn');
   const alertaPanel = document.getElementById('alerta-panel');
-  state.alertaVisual = { enabled: true, bg: true, blink: true, bar: true, timer: true, badge: true, ring: true, progress: true, flowind: true, namebadge: true, timerbtn: true };
+  state.alertaVisual = {
+  enabled: true,
+
+  // principais ligados
+  bg: true,
+  bar: true,
+  timer: true,
+  progress: true,
+  flowind: true,
+  timerbtn: true,
+
+  // mais exagerados desligados
+  blink: false,
+  badge: false,
+  ring: false,
+  namebadge: false
+};
 
   function applyAlertaClasses() {
     const b = document.body;
@@ -3355,6 +3369,11 @@ function init() {
       savePrefs();
     });
   });
+  
+  ['bg','blink','bar','timer','badge','ring','progress','flowind','namebadge','timerbtn'].forEach(key => {
+  const chk = document.getElementById(`alerta-${key}`);
+  if (chk) chk.checked = !!state.alertaVisual[key];
+  });
 
   updateAlertaOnOffBtn();
 
@@ -3393,7 +3412,9 @@ function init() {
   function applySystemTheme() {
     if (!state._themeManuallySet) {
       state.settings.theme = prefersDark.matches ? 'dark' : 'light';
-      document.body.className = 'theme-' + state.settings.theme;
+      document.body.classList.remove('theme-dark', 'theme-light');
+      document.body.classList.add('theme-' + state.settings.theme);
+      applyAlertaClasses();
     }
   }
   prefersDark.addEventListener('change', applySystemTheme);
@@ -3474,8 +3495,8 @@ function init() {
 
   for (let i=1;i<=4;i++) createCard(i);
   state.nextChatId=5;
-  applyAlertaClasses(); // re-apply after cards exist
-  applyAllPrefsToUI();  // aplicar tudo na UI depois dos cards criados
+  applyAllPrefsToUI(); // re-apply after cards exist
+  applyAlertaClasses();  // aplicar tudo na UI depois dos cards criados
 
   setTimeout(()=>showToast('BarTimer v2.0','Bem-vindo! Pressione ? para atalhos','👋'), 600);
 }
